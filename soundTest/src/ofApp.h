@@ -36,7 +36,8 @@ public:
 		if(ang > PIx2)
 			ang -= PIx2;
 		
-		return currentSample * std::sin(ang) * gain;;
+//		return currentSample * std::sin(ang) * gain;
+		return std::sin(ang) * gain;;
 		
 	}
 private:
