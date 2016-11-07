@@ -18,18 +18,33 @@ void ofApp::setup(){
 	ang.set(0, 0, 0);
 	
 	ball.setLimits(baseDim);
+	
+	ofSetSmoothLighting(true); //change;
+	pointLight.setDiffuseColor(ofColor(100, 10, 200));
+	pointLight.setSpecularColor(ofColor(10, 100, 20));
+	
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
+	pointLight.setPosition(ofGetMouseX(), ofGetMouseY(), posZ);
+	
 
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-	
+	ofEnableLighting();
+	pointLight.enable();
 	ofPushMatrix();
 	ofTranslate(ofGetWidth() * 0.5, ofGetHeight() * 0.5);
+	
+	if(bDrawLights) {
+		ofFill();
+		ofSetColor(pointLight.getDiffuseColor());
+		pointLight.draw();
+	}
+
 
 	
 	if (drawBool) {

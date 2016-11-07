@@ -50,7 +50,7 @@ public:
 	Ball(){
 		grav.set(0, 1, 0);
 		radi = 50;
-		col = ofColor(0);
+		col = ofColor(255);
 		acc.set(0,0,0);
 		vel.set(0,0,0);
 		setPos(ofVec3f(0,0,0));
@@ -169,12 +169,18 @@ class ofApp : public ofBaseApp{
 	bool drawBool = true;
 	bool perspective = true;
 	bool drawBottom = true;
+	bool bDrawLights = true;
+	
+	
+	
 	
 	float baseDim = 580;
-	
 	float posZ = 0;
 
 	Ball ball;
+	
+	
+	ofLight pointLight;
 	
 };
 

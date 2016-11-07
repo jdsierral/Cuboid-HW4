@@ -1,0 +1,5 @@
+ofxAudioAnalyzer
+ofxFft
+ofxGui
+ofxSuddenMotion
+ofxXmlSettings

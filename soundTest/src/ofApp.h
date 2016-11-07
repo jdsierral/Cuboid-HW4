@@ -9,7 +9,7 @@ public:
 	Osc (float sampleRate) : sr(sampleRate) {
 		ang = 0;
 		angDelta = 0;
-		p = 0.8;
+		p = 0.999;
 	}
 	void setFreq(float newFreq){
 		const double cyclesPerSample = newFreq / sr;
