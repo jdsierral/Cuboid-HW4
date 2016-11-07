@@ -17,6 +17,9 @@ void ofApp::setup(){
 	
 	ofSetFrameRate(30);
 	
+	osc = new Osc(sampleRate);
+	osc->setFreq(1000);
+	osc->setGain(0.3);
 
 }
 
@@ -30,9 +33,6 @@ void ofApp::draw(){
 	ofDrawCircle(ofRandom(ofGetWidth()),
 				 ofRandom(ofGetHeight()),
 				 ofRandom(vol) * ofRandom(1000));
-	
-	
-
 }
 
 //==============================================================
@@ -47,8 +47,8 @@ void ofApp::audioIn(float *input, int bufferSize, int nChan){
 
 void ofApp::audioOut(float *output, int bufferSize, int nChan){
 	for (int i = 0; i < bufferSize; i++) {
-		output[2*i] = ofRandom(-1, 1) * ofGetMouseY() / ofGetHeight();
-		output[2*i+1] = ofRandom(-1, 1) * ofGetMouseX() / ofGetWidth();
+		output[2*i] = osc->tick();
+		output[2*i+1] = output[2*i];
 	}
 }
 
@@ -75,7 +75,9 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-
+	float noteInterval = 2 * x/ofGetWidth();
+	osc->setFreq(400 * noteInterval);
+	osc->excite();
 }
 
 //--------------------------------------------------------------
