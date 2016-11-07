@@ -37,12 +37,12 @@ void ofApp::draw(){
 
 //==============================================================
 void ofApp::audioIn(float *input, int bufferSize, int nChan){
-	vol = 0;
-	for (int i = 0; i < bufferSize; i++) {
-		vol += fabs(input[2*i]);
-		vol += fabs(input[2*i+1]);
-	}
-	vol /= 2 * bufferSize + 1;
+//	vol = 0;
+//	for (int i = 0; i < bufferSize; i++) {
+//		vol += fabs(input[2*i]);
+//		vol += fabs(input[2*i+1]);
+//	}
+//	vol /= 2 * bufferSize + 1;
 }
 
 void ofApp::audioOut(float *output, int bufferSize, int nChan){
@@ -75,7 +75,7 @@ void ofApp::mouseDragged(int x, int y, int button){
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
-	float noteInterval = 2 * x/ofGetWidth();
+	float noteInterval = 1 + ofGetMouseX()/ofGetWidth();
 	osc->setFreq(400 * noteInterval);
 	osc->excite();
 }

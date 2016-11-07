@@ -30,14 +30,14 @@ public:
 	float tick(){
 		double currentSample = magn;
 		magn = (magn > 0.00001 ? currentSample * p : 0);
-		std::cout<<"Mag: "<<currentSample<<std::endl;
+//		std::cout<<"Mag: "<<currentSample<<std::endl;
 		
 		ang += angDelta;
 		if(ang > PIx2)
 			ang -= PIx2;
 		
-//		return currentSample * std::sin(ang) * gain;
-		return std::sin(ang) * gain;;
+		return currentSample * std::sin(ang) * gain;
+//		return std::sin(ang) * gain;;
 		
 	}
 private:
