@@ -10,21 +10,16 @@
 #define Generator_hpp
 
 #include <stdio.h>
-#include "Math.h"
+#include <ofMain.h>
 
 class Osc
 {
 public:
 	Osc (float sampleRate);
-	
 	void setFreq(float newFreq);
-	
 	void setGain(float newGain);
-	
 	void excite();
-	
 	void setPole(float newPole);
-	
 	float tick();
 	
 private:

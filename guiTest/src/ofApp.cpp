@@ -81,14 +81,16 @@ void ofApp::draw(){
 		ofDrawBox(0, 0, 0, baseDim, baseDim, 1);
 		ofPopMatrix();
 		
-		if (drawBottom) {
-			ofPushMatrix();
-			ofTranslate(0, 0, -baseDim/2.f);
-			ofRotateX(0);
-			ofSetColor(col[4]);
-			ofDrawBox(0, 0, 0, baseDim, baseDim, 1);
-			ofPopMatrix();
-		}
+//		ofPushMatrix();
+		
+//		if (drawBottom) {
+//			ofPushMatrix();
+//			ofTranslate(0, 0, -baseDim/2.f);
+//			ofRotateX(0);
+//			ofSetColor(col[4]);
+//			ofDrawBox(0, 0, 0, baseDim, baseDim, 1);
+//			ofPopMatrix();
+//		}
 	}
 	ball.animate();
 	ball.display();

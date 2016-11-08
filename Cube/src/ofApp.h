@@ -7,6 +7,20 @@
 #include "Lights.hpp"
 #include "ofxSuddenMotion.h"
 
+
+//-----------------------------------------------------------------------------
+// Preprocessor definitions
+//-----------------------------------------------------------------------------
+#define SR				44100	// sample rate
+#define FR				30		// frame Rate;
+#define NUM_CHAN		2		// number of channels
+#define BUF_SIZE		512		// number of frames in a buffer
+
+
+//-----------------------------------------------------------------------------
+// Application
+//-----------------------------------------------------------------------------
+
 class ofApp : public ofBaseApp{
 	
 public:
@@ -33,13 +47,14 @@ private:
 	ofxSuddenMotion sms;
 	
 	Wall* wall;
-//	Tile* testTile;
-	Ball ball;
+	Ball* ball;
 	
+	float baseDim = 530;
 	const int numTiles = 8;
 	
 	float fr;
-	int sampleRate;
+	int sr;
+	
 	int nChan;
 	int bufSize;
 	

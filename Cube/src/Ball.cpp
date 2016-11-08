@@ -51,6 +51,8 @@ Ball::Ball(){
 	setPos(ofVec3f(0,0,0));
 }
 
+Ball::~Ball(){};
+
 void Ball::setLimits(float baseDim) {
 	rearLimit.set(ofVec3f(-baseDim/2.f + radi,
 						  -baseDim/2.f + radi,

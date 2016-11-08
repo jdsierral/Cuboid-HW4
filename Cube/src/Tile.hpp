@@ -10,6 +10,7 @@
 #define Tile_hpp
 
 #include <stdio.h>
+#include "ofMain.h"
 
 class Tile
 {

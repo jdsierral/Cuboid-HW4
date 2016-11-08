@@ -11,14 +11,12 @@
 
 Tile::Tile() {
 	float newState = ofRandom(-1, 1);
-	state = (newState > 0 ? true : false );
+	state = (newState > 0 ? true : false);
 	setColor(ofColor(200, 50, 200));
 	setPos(ofVec3f(0, 0, 0));
 }
 
-Tile::~Tile() {
-	
-}
+Tile::~Tile(){}
 
 
 void Tile::setPos(ofVec3f newPos){
@@ -37,29 +35,33 @@ void Tile::setColor(ofColor newCol){
 	colOn = newCol;
 	colOff = colOn.getInverted();
 	//Check better relation for aesthetical purposes
-	
 }
+
 void Tile::setOn(){
 	state = true;
 }
+
 void Tile::setOff(){
 	state = false;
 }
+
 void Tile::setState(bool newState){
 	if (newState != state)
 		state = newState;
 }
 
-
 ofVec3f Tile::getPos(){
 	return pos;
 }
+
 ofVec3f Tile::getAng(){
 	return ang;
 }
+
 ofColor Tile::getColor(){
 	return colOn;
 }
+
 bool Tile::getState(){
 	return state;
 }

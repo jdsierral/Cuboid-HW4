@@ -59,6 +59,7 @@ void Wall::display(){
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
 			ofPushMatrix();
+			ofRotateY(90 * floor(i/(m/4)));
 			ofTranslate(tileSize.x * i + 10, tileSize.y * j + 10);
 			tileBoard[i][j].display();
 			ofPopMatrix();
