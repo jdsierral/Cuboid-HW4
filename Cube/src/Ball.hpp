@@ -36,6 +36,8 @@ public:
 	void setLimits(float baseDim);
 	void setLimits(ofPoint newRearLimit, ofPoint newForeLimit);
 	void setPos(ofVec3f newPos);
+	void setCol(ofColor newCol);
+	void setGravity(ofVec3f newGrav);
 	void display();
 	void animate();
 	

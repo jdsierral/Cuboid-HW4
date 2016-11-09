@@ -38,7 +38,7 @@ void Hit::setPole(float newPole){
 ofVec3f Hit::tick(){
 	double currentSample = mag;
 	mag = (mag > 0.00001 ? currentSample * p : 0);
-	std::cout<<"Mag: "<<currentSample<<std::endl;
+//	std::cout<<"Mag: "<<currentSample<<std::endl;
 	return currentSample * dir;
 }
 
@@ -83,12 +83,20 @@ void Ball::setPos(ofVec3f newPos) {
 	pos.set(newX, newY, newZ);
 }
 
+void Ball::setCol(ofColor newCol) {
+	col = newCol;
+}
+
+void Ball::setGravity(ofVec3f newGrav) {
+	grav = newGrav;
+}
+
 void Ball::display(){
 	ofSetColor(col);
 	ofDrawSphere(pos, radi);
 }
 void Ball::animate(){
-	acc =  hit.tick() - 0.0 * vel + grav;
+	acc =  hit.tick() - 0.01 * vel + grav;
 	vel += acc;
 	pos += vel;
 	

@@ -45,6 +45,12 @@ void Wall::setTileSize(ofVec3f newTileSize){
 	}
 }
 
+void Wall::setSize(ofVec2f newBaseDim){
+	baseDim = newBaseDim;
+	setTileSize(ofVec3f(baseDim.x/(float)m, baseDim.y/(float)n, 1));
+	
+}
+
 ofVec3f Wall::getPos(){
 	return pos;
 }
@@ -56,13 +62,43 @@ ofColor Wall::getCol(){
 }
 
 void Wall::display(){
+	
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
-			ofPushMatrix();
-			ofRotateY(90 * floor(i/(m/4)));
-			ofTranslate(tileSize.x * i + 10, tileSize.y * j + 10);
-			tileBoard[i][j].display();
-			ofPopMatrix();
+			if (0 == floor((float)i/(float)n)) {
+				ofPushMatrix();
+				ofTranslate(-baseDim.x/8, -baseDim.y/2, baseDim.y/2);
+				ofRotateY(90);
+				ofTranslate(tileSize.x * i, tileSize.y * j);
+				tileBoard[i][j].display();
+				ofPopMatrix();
+			}
+			
+			if (1 == floor((float)i/(float)n)) {
+				ofPushMatrix();
+				ofTranslate(-3*baseDim.x/8, -baseDim.y/2, -baseDim.y/2);
+				ofTranslate(tileSize.x * i, tileSize.y * j);
+				tileBoard[i][j].display();
+				ofPopMatrix();
+			}
+			
+			if (2 == floor((float)i/(float)n)) {
+				ofPushMatrix();
+				ofTranslate(baseDim.x/8, -baseDim.y/2, -5*baseDim.y/2);
+				ofRotateY(-90);
+				ofTranslate(tileSize.x * i, tileSize.y * j);
+				tileBoard[i][j].display();
+				ofPopMatrix();
+			}
+			
+			if (3 == floor((float)i/(float)n)) {
+				ofPushMatrix();
+				ofTranslate(7*baseDim.x/8, -baseDim.y/2, baseDim.y/2);
+				ofRotateY(180);
+				ofTranslate(tileSize.x * i, tileSize.y * j);
+				tileBoard[i][j].display();
+				ofPopMatrix();
+			}
 		}
 	}
 }

@@ -24,6 +24,8 @@ public:
 	void setCol(ofColor newCol);
 	
 	void setTileSize(ofVec3f newTileSize);
+	void setSize(ofVec2f newBaseDim);
+	
 	
 	ofVec3f getPos();
 	ofVec3f getAng();
@@ -41,12 +43,17 @@ public:
 			return val;
 	}
 	
+	ofVec3f testPos;
+	float testRot;
+	
 private:
 	const int m, n; // m x n dimensional wall;
 	ofVec3f pos;
 	ofVec3f ang;
 	ofColor col;
 	ofVec3f tileSize;
+	ofVec2f baseDim;
+	
 	
 	Tile ** tileBoard;
 	Tile * tilePointer;

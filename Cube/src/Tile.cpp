@@ -81,6 +81,6 @@ void Tile::drawBox(ofVec3f pos, ofVec3f dim, ofVec3f ang, ofColor col){
 	ofPushMatrix();
 	ofTranslate(pos);
 	ofSetColor(col);
-	ofDrawBox(0, 0, 0, dim.x, dim.y, dim.z);
+	ofDrawBox(dim.x/2, dim.y/2, 0, dim.x, dim.y, dim.z);
 	ofPopMatrix();
 }
