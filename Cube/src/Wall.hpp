@@ -13,6 +13,7 @@
 #include "ofMain.h"
 #include "Tile.hpp"
 
+
 class Wall
 {
 public:
@@ -33,6 +34,7 @@ public:
 	
 	void display();
 	void tick();
+	void computeAudio(float *output, int bufferSize, int nChan);
 	
 	int clip(int val, int min, int max) {
 		if (val < min)
@@ -46,6 +48,8 @@ public:
 	ofVec3f testPos;
 	float testRot;
 	
+	
+
 private:
 	const int m, n; // m x n dimensional wall;
 	ofVec3f pos;
@@ -55,8 +59,15 @@ private:
 	ofVec2f baseDim;
 	
 	
+	int bufferSize = 512; //change this please;
+	
 	Tile ** tileBoard;
 	Tile * tilePointer;
+	
+	
+	//=================================================================//
+	
+	
 };
 
 #endif /* Wall_hpp */

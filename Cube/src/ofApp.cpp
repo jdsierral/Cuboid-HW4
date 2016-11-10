@@ -3,21 +3,14 @@
 //--------------------------------------------------------------
 void ofApp::setup(){
 	
-	/*
-	osc = new Osc(sampleRate);
-	osc->setFreq(1000);
-	osc->setGain(0.3);
+	wall = new Wall(numTiles * 4, numTiles);
+	ball = new Ball();
 	
+	wall->setSize(ofVec2f(baseDim * 4, baseDim));
+	wall->setCol(200);
 	
-	ball.setLimits(baseDim);
-	
-	ofSetSmoothLighting(true); //change;
-	pointLight.setDiffuseColor(ofColor(100, 10, 200));
-	pointLight.setSpecularColor(ofColor(10, 100, 20));
-	
-	
-	ofPoint smoothed = sms.getSmoothedXYZ();
-	*/
+	ball->setLimits(baseDim);
+	ball->setCol(ofColor(255, 0, 0));
 	
 	inStream.printDeviceList();
 	inStream.setDeviceID(0);
@@ -33,39 +26,21 @@ void ofApp::setup(){
 	sms.setSmoothPct(0.9);
 	
 	ofEnableDepthTest();
-	
-	
-	
-	wall = new Wall(numTiles * 4, numTiles);
-	ball = new Ball();
-	
-	wall->setSize(ofVec2f(baseDim * 4, baseDim));
-	wall->setCol(200);
-	
-	
-	ball->setLimits(baseDim);
-	ball->setCol(ofColor(255, 0, 0));
-	
-	
 	ofBackground(200);
-	
-	
-	for (int i = 0; i < 5; i++){
-		col[i] = ofColor(ofRandom(255), ofRandom(255), ofRandom(255));
-	}
 }
 
 //--------------------------------------------------------------
 void ofApp::update(){
 	sms.readMotion();
 	if (ofGetFrameRate() != 0) {
-		if (0 == (int)ofGetFrameNum()%(int)ofGetFrameRate()){
+		if (ellapsedSeconds != ofGetSeconds()){
+			ellapsedSeconds = ofGetSeconds();
 			wall->tick();
 		}
 	}
-	ball->animate();
 	ofPoint accPoint = sms.getSmoothedXYZ()/100;
 	ball->setGravity(ofPoint(-accPoint.x, accPoint.z, accPoint.y));
+	ball->animate();
 }
 
 //--------------------------------------------------------------
@@ -88,10 +63,22 @@ void ofApp::audioIn(float *input, int bufferSize, int nChan){
 }
 
 void ofApp::audioOut(float *output, int bufferSize, int nChan){
-	for (int i = 0; i < bufferSize; i++) {
-		output[2*i] = 0;//osc->tick();
-		output[2*i+1] = output[2*i];
+	if (!bypass) {
+		wall->computeAudio(output, bufferSize, nChan);
+		for (int i = 0; i < bufferSize; i++) {
+			output[2*i]	  /= 256;
+			output[2*i+1] /= 256;
+		}
+	} else {
+		for (int i = 0; i < bufferSize; i++) {
+			output[2*i]	  *= 0.05;
+			output[2*i+1] *= 0.05;
+			if (output[2*i] > 1) {
+				std::cout<<"SampleClipped"<<std::endl;
+			}
+		}
 	}
+	
 }
 
 
@@ -99,48 +86,10 @@ void ofApp::audioOut(float *output, int bufferSize, int nChan){
 void ofApp::keyPressed(int key){
 	switch (key) {
 	  case 'i':
-			pos.y += fact;
+			//			wall->getTile(0, 0)->oscParams.
 			break;
-		case 'k':
-			pos.y -= fact;
-			break;
-		case 'l':
-			pos.x += fact;
-			break;
-		case 'j' :
-			pos.x -= fact;
-			break;
-		case 'o':
-			pos.z += fact;
-			break;
-		case 'm':
-			pos.z -= fact;
-			break;
-		case 'e':
-			ang.y += fact;
-			break;
-		case 'd':
-			ang.y -= fact;
-			break;
-		case 's':
-			ang.x -= fact;
-			break;
-		case 'f':
-			ang.x += fact;
-			break;
-		case 'w':
-			ang.z += fact;
-			break;
-		case 'v':
-			ang.z -= fact;
-			break;
-		case ' ':
-			mouseBool = !mouseBool;
-			break;
-		case 'z':
-			bDummyGUI = !bDummyGUI;
-			break;
-		default:
+			
+  default:
 			break;
 	}
 
@@ -153,25 +102,26 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-	if (mouseBool) {
-		wall->testPos.x = x - ofGetWidth()/2.f;
-		wall->testPos.y = y - ofGetHeight()/2.f;
-	}
+//	wall->sawParams.setParamValue("/0x00/freq", x);
+//	wall->sawParams.setParamValue("/0x00/gain", y/(float)ofGetHeight());
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseDragged(int x, int y, int button){
-
 }
 
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 	ball->hit.excite();
+//	wall->sawParams.setParamValue("/0x00/adsr/gate", 1);
+//	for (int i = 0; i < wall->sawParams.getParamsCount(); i++) {
+//		std::cout<<wall->sawParams.getParamAdress(i)<<std::endl;
+//	}
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-
+//	wall->sawParams.setParamValue("/0x00/adsr/gate", 0);
 }
 
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY ){

@@ -45,14 +45,13 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+
 private:
-	
 	ofVec3f pos;
 	ofVec3f ang;
 	
 	bool mouseBool;
 	bool bDummyGUI;
-	ofColor col[5];
 	
 	ofxSuddenMotion sms;
 	
@@ -71,4 +70,7 @@ private:
 	
 	ofSoundStream inStream;
 	ofSoundStream outStream;
+	
+	bool bypass = false;
+	int ellapsedSeconds = 0;
 };

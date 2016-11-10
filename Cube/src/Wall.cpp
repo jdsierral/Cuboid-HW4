@@ -15,6 +15,19 @@ Wall::Wall(int m, int n): m(m), n(n) {
 	for (int i = 0; i< m; i++){
 		tileBoard[i] = &tilePointer[n * i];
 	}
+	
+	int noteArray  []{55, 60, 62, 64, 67, 69, 72, 76};
+	int noteArraySize = sizeof(noteArray)/sizeof(int);
+	
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * (int)ofRandom(-4, 4));
+			tileBoard[i][j].setAttack  (1);
+			tileBoard[i][j].setRelease (800);
+			tileBoard[i][j].setModRatio((int)ofRandom(4));
+			tileBoard[i][j].setModGain (ofRandom(1000));
+		}
+	}
 }
 Wall::~Wall(){
 	delete [] tileBoard;
@@ -37,7 +50,6 @@ void Wall::setCol(ofColor newCol){
 
 void Wall::setTileSize(ofVec3f newTileSize){
 	tileSize = newTileSize;
-	
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
 			tileBoard[i][j].setDim(tileSize);
@@ -48,7 +60,6 @@ void Wall::setTileSize(ofVec3f newTileSize){
 void Wall::setSize(ofVec2f newBaseDim){
 	baseDim = newBaseDim;
 	setTileSize(ofVec3f(baseDim.x/(float)m, baseDim.y/(float)n, 1));
-	
 }
 
 ofVec3f Wall::getPos(){
@@ -106,8 +117,6 @@ void Wall::display(){
 void Wall::tick(){
 	for (int i = 0; i < m-1; i++) {
 		for (int j = 0; j < n-1; j++) {
-			
-			//recheck logic... might fail by double checking ints
 			int state = 0;
 			if (tileBoard[max<int>(i-1, 0)][max<int>(j-1, 0)].getState())
 				state++;
@@ -136,6 +145,15 @@ void Wall::tick(){
 				if (state == 3)
 					tileBoard[i][j].setOn();
 			}
+		}
+	}
+}
+
+
+void Wall::computeAudio(float *output, int bufferSize, int nChan){
+	for (int i = 0; i < m; i++) {
+		for (int j = 0; j < n; j++) {
+			tileBoard[i][j].computeAudio(output, bufferSize, nChan);
 		}
 	}
 }

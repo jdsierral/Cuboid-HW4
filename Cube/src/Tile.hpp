@@ -11,6 +11,8 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "Generator.hpp"
+#include "SawOsc.h"
 
 class Tile
 {
@@ -21,16 +23,28 @@ public:
 	void setAng(ofVec3f newAng);
 	void setDim(ofVec3f newDim);
 	void setColor(ofColor newCol);
-	void setOn();
-	void setOff();
-	void setState(bool newState);
 	
 	ofVec3f getPos();
 	ofVec3f getAng();
 	ofColor getColor();
+	
 	bool getState();
+	void setOn();
+	void setOff();
+	void setState(bool newState);
 	
 	void display();
+	
+	//============================================================//
+	
+	void setPitch(float newNoteNum);
+	void setAttack(float attackInMs);
+	void setRelease(float releaseInMs);
+	void setModRatio(float modRatio);
+	void setModGain(float modGain);
+
+	
+	void computeAudio(float *buf, int bufSize, int nChan);
 	
 private:
 	
@@ -43,6 +57,21 @@ private:
 	ofColor colOn; //colors
 	ofColor colOff;
 	bool state; //on and off states
+	
+	//============================================================//
+	int bufferSize = 512;
+	int sampleRate = 44100;
+	
+	SawOsc sawOsc;
+	MapUI oscParams;
+	
+	float** audioBuf;
+	
+//	/0x00/freq
+//	/0x00/gain
+//	/0x00/adsr/att
+//	/0x00/adsr/gate
+//	/0x00/adsr/rel
 };
 
 #endif /* Tile_hpp */

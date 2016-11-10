@@ -1,8 +1,9 @@
 #pragma once
 
 #include "ofMain.h"
+#include "SinOsc.h"
 
-
+/*
 class Osc
 {
 public:
@@ -30,15 +31,10 @@ public:
 	float tick(){
 		double currentSample = magn;
 		magn = (magn > 0.00001 ? currentSample * p : 0);
-//		std::cout<<"Mag: "<<currentSample<<std::endl;
-		
 		ang += angDelta;
 		if(ang > PIx2)
 			ang -= PIx2;
-		
 		return currentSample * std::sin(ang) * gain;
-//		return std::sin(ang) * gain;;
-		
 	}
 private:
 	const double PIx2 = M_PI * 2;
@@ -50,8 +46,8 @@ private:
 	float ang;
 	float angDelta;
 	float p;
-	
 };
+*/
 
 class ofApp : public ofBaseApp{
 	
@@ -76,11 +72,20 @@ public:
 	void audioOut(float *input, int bufferSize, int nChan);
 	
 private:
+	bool bInternalSpeakers = true;
 	ofSoundStream inStream;
 	ofSoundStream outStream;
 	
 	int sampleRate, nChan;
+	int bufferSize;
 	float vol;
-	Osc* osc;
 	
+	SinOsc sinOsc;
+	MapUI ui;
+	
+	
+	
+	float** audioBuf;
+	vector <float> lAudio;
+	vector <float> rAudio;
 };

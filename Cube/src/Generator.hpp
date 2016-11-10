@@ -36,4 +36,12 @@ private:
 	
 };
 
+
+class Generator
+{
+public:
+	float* compute();
+	void excite();
+private:
+};
 #endif /* Generator_hpp */
