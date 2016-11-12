@@ -11,8 +11,8 @@
 
 #include <stdio.h>
 #include "ofMain.h"
-#include "Generator.hpp"
-#include "SinOsc.h"
+#include "OnePoleLPF.h"
+#include "Faust/FmOsc.h"
 
 class Tile
 {
@@ -44,6 +44,8 @@ public:
 	void setRelease(float releaseInMs);
 	void setModRatio(float modRatio);
 	void setModGain(float modGain);
+	void setGain(float gainInDb);
+	void setPan(float pan);
 
 	
 	void computeAudio(float *buf, int bufSize, int nChan);
@@ -64,16 +66,21 @@ private:
 	int bufferSize = 512;
 	int sampleRate = 44100;
 	
-	SinOsc sawOsc;
+	FmOsc fmOsc;
 	MapUI oscParams;
 	
 	float** audioBuf;
 	
-//	/0x00/freq
-//	/0x00/gain
-//	/0x00/adsr/att
-//	/0x00/adsr/gate
-//	/0x00/adsr/rel
+	OnePoleLPF alphaFilter;
+	
+	
+	///Gen/Env/att
+	///Gen/Env/gate
+	///Gen/Env/rel
+	///Gen/carfreq
+	///Gen/gain
+	///Gen/modGain
+	///Gen/modRatio
 };
 
 #endif /* Tile_hpp */

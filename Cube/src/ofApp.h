@@ -4,8 +4,10 @@
 #include "Generator.hpp"
 #include "Wall.hpp"
 #include "Ball.hpp"
-#include "Lights.hpp"
+#include "Waveform.hpp"
+#include "GenLights.hpp"
 #include "ofxSuddenMotion.h"
+
 
 
 //--------------------------------------------------------------------------//
@@ -50,27 +52,23 @@ private:
 	ofVec3f pos;
 	ofVec3f ang;
 	
-	bool mouseBool;
-	bool bDummyGUI;
-	
-	ofxSuddenMotion sms;
 	
 	Wall* wall;
 	Ball* ball;
+	Waveform* waveform;
+	GenLights* genLights;
 	
-	float baseDim = 530;
+	ofSoundStream stream;
+	ofxSuddenMotion sms;
+	
+	
+	const float baseDim = 530;
 	const int numTiles = 8;
 	
-	float fr;
-	int sr;
-	
-	int nChan;
-	int bufSize;
-	float fact = 20;
-	
-	ofSoundStream inStream;
-	ofSoundStream outStream;
 	
 	bool bypass = false;
-	int ellapsedSeconds = 0;
+	int timer = 0;
+	int timeLapse = 500;
+	
+	
 };

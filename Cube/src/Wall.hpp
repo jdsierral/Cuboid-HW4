@@ -17,7 +17,7 @@
 class Wall
 {
 public:
-	Wall(int m, int n);
+	Wall(int m, int n, int bufSize);
 	~Wall();
 	
 	void setPos(ofVec3f newPos);
@@ -58,7 +58,7 @@ private:
 	ofVec3f tileSize;
 	ofVec2f baseDim;
 	
-	int bufferSize = 512; //change this please;
+	int bufferSize;
 	
 	Tile ** tileBoard;
 	Tile * tilePointer;

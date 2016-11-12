@@ -53,22 +53,24 @@ Ball::Ball(Wall* someWall){
 
 Ball::~Ball(){};
 
-void Ball::setLimits(float baseDim) {
+void Ball::setLimits(float baseDim, float newNumTiles) {
 	rearLimit.set(ofVec3f(-baseDim/2.f + radi,
 						  -baseDim/2.f + radi,
 						  -baseDim/2.f + radi));
 	foreLimit.set(ofVec3f(baseDim/2.f - radi,
 						  baseDim/2.f - radi,
 						  baseDim/2.f - radi));
+	numTiles = newNumTiles;
 }
 
-void Ball::setLimits(ofPoint newRearLimit, ofPoint newForeLimit) {
+void Ball::setLimits(ofPoint newRearLimit, ofPoint newForeLimit, float newNumTiles) {
 	rearLimit.set(ofVec3f(newRearLimit.x + radi,
 						  newRearLimit.y + radi,
 						  newRearLimit.z + radi));
 	foreLimit.set(ofVec3f(newForeLimit.x - radi,
 						  newForeLimit.y - radi,
 						  newForeLimit.z - radi));
+	numTiles = newNumTiles;
 }
 
 void Ball::setPos(ofVec3f newPos) {
@@ -105,10 +107,9 @@ void Ball::animate(){
 		pos.x = rearLimit.x + (rearLimit.x - pos.x);
 		int m = 0;
 		int n = 0;
-		m = floor((-pos.y + 215)/53.75);
-		n = floor((-pos.z + 215)/53.75);
+		m = floor((-pos.y + foreLimit.y)/(2 * foreLimit.y/numTiles));
+		n = floor((-pos.z + foreLimit.z)/(2 * foreLimit.z/numTiles));
 		wall->switchTileState(m, n);
-		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
 	
 	if (pos.x >= foreLimit.x) {
@@ -116,10 +117,10 @@ void Ball::animate(){
 		pos.x = foreLimit.x - (pos.x - foreLimit.x);
 		int m = 0;
 		int n = 0;
-		m = floor((pos.y + 215)/53.75) + 16;
-		n = floor((-pos.z + 215)/53.75);
+		m = floor(( pos.y + foreLimit.y)/(2 * foreLimit.y/numTiles))
+			+ (2 * numTiles);
+		n = floor((-pos.z + foreLimit.z)/(2 * foreLimit.z/numTiles));
 		wall->switchTileState(m, n);
-		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
 	
 	if (pos.y <= rearLimit.y) {
@@ -127,10 +128,10 @@ void Ball::animate(){
 		pos.y = rearLimit.y + (rearLimit.y - pos.y);
 		int m = 0;
 		int n = 0;
-		m = floor((pos.x + 215)/53.75) + 8;
-		n = floor((-pos.z + 215)/53.75);
+		m = floor(( pos.x + foreLimit.x)/(2 * foreLimit.x/numTiles))
+			+ (1 * numTiles);
+		n = floor((-pos.z + foreLimit.z)/(2 * foreLimit.z/numTiles));
 		wall->switchTileState(m, n);
-		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
 	
 	if (pos.y >= foreLimit.y) {
@@ -138,10 +139,10 @@ void Ball::animate(){
 		pos.y = foreLimit.y - (pos.y - foreLimit.y);
 		int m = 0;
 		int n = 0;
-		m = floor((-pos.x + 215)/53.75) + 24;
-		n = floor((-pos.z + 215)/53.75);
+		m = floor((-pos.x + foreLimit.x)/(2 * foreLimit.x/numTiles))
+			+ (3 * numTiles);
+		n = floor((-pos.z + foreLimit.z)/(2 * foreLimit.z/numTiles));
 		wall->switchTileState(m, n);
-		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
 	
 	if (pos.z <= rearLimit.z) {

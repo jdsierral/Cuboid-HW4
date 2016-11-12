@@ -34,8 +34,8 @@ class Ball
 public:
 	Ball(Wall* someWall);
 	~Ball();
-	void setLimits(float baseDim);
-	void setLimits(ofPoint newRearLimit, ofPoint newForeLimit);
+	void setLimits(float baseDim, float newNumTiles);
+	void setLimits(ofPoint newRearLimit, ofPoint newForeLimit, float newNumTiles);
 	void setPos(ofVec3f newPos);
 	void setCol(ofColor newCol);
 	void setGravity(ofVec3f newGrav);
@@ -44,23 +44,23 @@ public:
 	
 	void checkPosition();
 	
+	Wall* wall;
+	Hit hit;
+	
+	ofVec3f force;
 	ofVec3f grav;
 	ofVec3f pos;
 	ofVec3f vel;
 	ofVec3f acc;
-	Hit hit;
 	
 	ofPoint rearLimit;
 	ofPoint foreLimit;
 	
-	ofVec3f force;
-	
 	ofColor col;
+	
 	float radi;
-	
 	float eCoef = 0.95;
-	
-	Wall* wall;
+	float numTiles;
 };
 
 

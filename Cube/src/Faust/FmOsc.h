@@ -673,12 +673,14 @@ class FmOsc : public dsp {
 	float 	fRec1[2];
 	FAUSTFLOAT 	fentry3;
 	float 	fRec4[2];
+	FAUSTFLOAT 	fentry4;
+	float 	fRec5[2];
 	FAUSTFLOAT 	fbutton0;
 	float 	fVec1[2];
 	float 	fConst2;
-	FAUSTFLOAT 	fentry4;
 	FAUSTFLOAT 	fentry5;
-	float 	fRec5[2];
+	FAUSTFLOAT 	fentry6;
+	float 	fRec6[2];
 	float 	fConst3;
 	int fSamplingFreq;
 
@@ -686,15 +688,12 @@ class FmOsc : public dsp {
 	virtual void metadata(Meta* m) { 
 		m->declare("name", "Fm Synthesizer");
 		m->declare("author", "Juan Sierra");
-		m->declare("math.lib/name", "Faust Math Library");
-		m->declare("math.lib/version", "2.0");
-		m->declare("math.lib/author", "GRAME");
-		m->declare("math.lib/copyright", "GRAME");
-		m->declare("math.lib/license", "LGPL with exception");
-		m->declare("filter.lib/name", "Faust Filter Library");
-		m->declare("filter.lib/version", "2.0");
 		m->declare("synth.lib/name", "Faust Synthesizer Library");
 		m->declare("synth.lib/version", "0.0");
+		m->declare("signal.lib/name", "Faust Signal Routing Library");
+		m->declare("signal.lib/version", "0.0");
+		m->declare("filter.lib/name", "Faust Filter Library");
+		m->declare("filter.lib/version", "2.0");
 		m->declare("basic.lib/name", "Faust Basic Element Library");
 		m->declare("basic.lib/version", "0.0");
 		m->declare("miscoscillator.lib/name", "Faust Oscillator Library");
@@ -704,12 +703,15 @@ class FmOsc : public dsp {
 		m->declare("envelope.lib/author", "GRAME");
 		m->declare("envelope.lib/copyright", "GRAME");
 		m->declare("envelope.lib/license", "LGPL with exception");
-		m->declare("signal.lib/name", "Faust Signal Routing Library");
-		m->declare("signal.lib/version", "0.0");
+		m->declare("math.lib/name", "Faust Math Library");
+		m->declare("math.lib/version", "2.0");
+		m->declare("math.lib/author", "GRAME");
+		m->declare("math.lib/copyright", "GRAME");
+		m->declare("math.lib/license", "LGPL with exception");
 	}
 
 	virtual int getNumInputs() { return 0; }
-	virtual int getNumOutputs() { return 1; }
+	virtual int getNumOutputs() { return 2; }
 	static void classInit(int samplingFreq) {
 	}
 	virtual void instanceConstants(int samplingFreq) {
@@ -724,9 +726,10 @@ class FmOsc : public dsp {
 		fentry1 = 5.0f;
 		fentry2 = 2.0f;
 		fentry3 = 0.1f;
+		fentry4 = 0.5f;
 		fbutton0 = 0.0;
-		fentry4 = 1.0f;
-		fentry5 = 2e+02f;
+		fentry5 = 1.0f;
+		fentry6 = 2e+02f;
 	}
 	virtual void instanceClear() {
 		for (int i=0; i<2; i++) iVec0[i] = 0;
@@ -735,8 +738,9 @@ class FmOsc : public dsp {
 		for (int i=0; i<2; i++) fRec0[i] = 0;
 		for (int i=0; i<2; i++) fRec1[i] = 0;
 		for (int i=0; i<2; i++) fRec4[i] = 0;
-		for (int i=0; i<2; i++) fVec1[i] = 0;
 		for (int i=0; i<2; i++) fRec5[i] = 0;
+		for (int i=0; i<2; i++) fVec1[i] = 0;
+		for (int i=0; i<2; i++) fRec6[i] = 0;
 	}
 	virtual void init(int samplingFreq) {
 		classInit(samplingFreq);
@@ -756,14 +760,15 @@ class FmOsc : public dsp {
 	virtual void buildUserInterface(UI* ui_interface) {
 		ui_interface->openVerticalBox("Gen");
 		ui_interface->openVerticalBox("Env");
-		ui_interface->addNumEntry("att", &fentry4, 1.0f, 0.0f, 1e+03f, 1.0f);
+		ui_interface->addNumEntry("att", &fentry5, 1.0f, 0.0f, 1e+03f, 1.0f);
 		ui_interface->addButton("gate", &fbutton0);
-		ui_interface->addNumEntry("rel", &fentry5, 2e+02f, 1.0f, 2e+03f, 1.0f);
+		ui_interface->addNumEntry("rel", &fentry6, 2e+02f, 1.0f, 2e+03f, 1.0f);
 		ui_interface->closeBox();
 		ui_interface->addNumEntry("carfreq", &fentry0, 4.4e+02f, 2e+01f, 2e+04f, 1.0f);
 		ui_interface->addNumEntry("gain", &fentry3, 0.1f, 0.0f, 1.0f, 0.01f);
 		ui_interface->addNumEntry("modGain", &fentry1, 5.0f, 0.0f, 1e+03f, 1.0f);
-		ui_interface->addNumEntry("modRatio", &fentry2, 2.0f, 1.0f, 1e+01f, 1.0f);
+		ui_interface->addNumEntry("modRatio", &fentry2, 2.0f, 1.0f, 1e+01f, 0.01f);
+		ui_interface->addNumEntry("pan", &fentry4, 0.5f, 0.0f, 1.0f, 0.01f);
 		ui_interface->closeBox();
 	}
 	virtual void compute (int count, FAUSTFLOAT** input, FAUSTFLOAT** output) {
@@ -774,14 +779,16 @@ class FmOsc : public dsp {
 		float 	fSlow4 = cosf(fSlow2);
 		float 	fSlow5 = (0 - fSlow3);
 		float 	fSlow6 = (0.001f * float(fentry3));
-		float 	fSlow7 = float(fbutton0);
-		float 	fSlow8 = float(fentry4);
+		float 	fSlow7 = (0.001f * float(fentry4));
+		float 	fSlow8 = float(fbutton0);
 		float 	fSlow9 = float(fentry5);
-		float 	fSlow10 = (fConst2 * (fSlow8 + fSlow9));
-		float 	fSlow11 = (fConst2 * fSlow8);
-		float 	fSlow12 = (fConst3 / fSlow8);
-		float 	fSlow13 = (1.0f / (0 - (fConst2 * (0 - fSlow9))));
+		float 	fSlow10 = float(fentry6);
+		float 	fSlow11 = (fConst2 * (fSlow9 + fSlow10));
+		float 	fSlow12 = (fConst2 * fSlow9);
+		float 	fSlow13 = (fConst3 / fSlow9);
+		float 	fSlow14 = (1.0f / (0 - (fConst2 * (0 - fSlow10))));
 		FAUSTFLOAT* output0 = output[0];
+		FAUSTFLOAT* output1 = output[1];
 		for (int i=0; i<count; i++) {
 			iVec0[0] = 1;
 			fRec2[0] = ((fSlow3 * fRec3[1]) + (fSlow4 * fRec2[1]));
@@ -793,13 +800,18 @@ class FmOsc : public dsp {
 			fRec0[0] = ((fRec1[1] * fTemp2) + (fRec0[1] * fTemp3));
 			fRec1[0] = (((fRec1[1] * fTemp3) + (fRec0[1] * (0 - fTemp2))) + iTemp0);
 			fRec4[0] = (fSlow6 + (0.999f * fRec4[1]));
-			fVec1[0] = fSlow7;
-			fRec5[0] = ((int((((fSlow7 - fVec1[1]) == 1) > 0)))?0:min(fSlow10, (fRec5[1] + 1)));
-			int iTemp4 = int((fRec5[0] < fSlow11));
-			output0[i] = (FAUSTFLOAT)((fRec0[0] * fRec4[0]) * ((iTemp4)?((int((fRec5[0] < 0)))?0:((iTemp4)?(fSlow12 * fRec5[0]):1)):((int((fRec5[0] < fSlow10)))?((fSlow13 * (fSlow11 - fRec5[0])) + 1):0)));
+			float fTemp4 = (fRec0[0] * fRec4[0]);
+			fRec5[0] = (fSlow7 + (0.999f * fRec5[1]));
+			fVec1[0] = fSlow8;
+			fRec6[0] = ((int((((fSlow8 - fVec1[1]) == 1) > 0)))?0:min(fSlow11, (fRec6[1] + 1)));
+			int iTemp5 = int((fRec6[0] < fSlow12));
+			float fTemp6 = ((iTemp5)?((int((fRec6[0] < 0)))?0:((iTemp5)?(fSlow13 * fRec6[0]):1)):((int((fRec6[0] < fSlow11)))?((fSlow14 * (fSlow12 - fRec6[0])) + 1):0));
+			output0[i] = (FAUSTFLOAT)((fTemp4 * (1 - fRec5[0])) * fTemp6);
+			output1[i] = (FAUSTFLOAT)((fTemp4 * fRec5[0]) * fTemp6);
 			// post processing
-			fRec5[1] = fRec5[0];
+			fRec6[1] = fRec6[0];
 			fVec1[1] = fVec1[0];
+			fRec5[1] = fRec5[0];
 			fRec4[1] = fRec4[0];
 			fRec1[1] = fRec1[0];
 			fRec0[1] = fRec0[0];

@@ -17,8 +17,8 @@ rel = nentry("rel", 200, 1, 2000, 1);
 
 process = gen * env * gain
 with {
-// Generator //
-gen = os.sawtooth(freq);
-// Envelope //
-env = vgroup("adsr", en.ar(att/1000, rel/1000, gate));
+	// Generator //
+	gen = os.sawtooth(freq);
+	// Envelope //
+	env = vgroup("adsr", en.ar(att/1000, rel/1000, gate));
 };

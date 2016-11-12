@@ -10,17 +10,20 @@
 
 
 Tile::Tile() {
-	float newState = ofRandom(-1, 1);
-	state = (newState > 0 ? true : false);
+	state = false;
 	setColor(ofColor(200, 50, 200));
 	setPos(ofVec3f(0, 0, 0));
 	
-	sawOsc.init(sampleRate);
-	sawOsc.buildUserInterface(&oscParams);
+	fmOsc.init(sampleRate);
+	fmOsc.buildUserInterface(&oscParams);
 	
 	audioBuf = new float*[2];
 	audioBuf[0] = new float[bufferSize];
 	audioBuf[1] = new float[bufferSize];
+	
+	alphaFilter.setExciteVal(255);
+	alphaFilter.setPole(0.95);
+	oscParams.setParamValue("/Gen/Env/gate", 0);
 }
 
 Tile::~Tile(){}
@@ -41,7 +44,6 @@ void Tile::setDim(ofVec3f newDim){
 void Tile::setColor(ofColor newCol){
 	colOn = newCol;
 	colOff = colOn.getInverted();
-	//Check better relation for aesthetical purposes
 }
 
 
@@ -62,24 +64,33 @@ bool Tile::getState(){
 }
 
 void Tile::setOn(){
-	state = true;
-	oscParams.setParamValue("/0x00/adsr/gate", 1);
+	if(state == false) {
+		state = true;
+		oscParams.setParamValue("/Gen/Env/gate", 1);
+		alphaFilter.excite();
+	}
 }
 
 void Tile::setOff(){
-	state = false;
-	oscParams.setParamValue("/0x00/adsr/gate", 0);
+	if (state == true) {
+		state = false;
+		oscParams.setParamValue("/Gen/Env/gate", 0);
+	}
 }
 
 void Tile::switchState(){
 	state = !state;
-	oscParams.setParamValue("/0x00/adsr/gate", (state ? 1 : 0));
+	oscParams.setParamValue("/Gen/Env/gate", (state ? 1 : 0));
+	if (state)
+		alphaFilter.excite();
 }
 
 void Tile::setState(bool newState){
 	if (newState != state)
 		state = newState;
-	oscParams.setParamValue("/0x00/adsr/gate", (state? 1 : 0));
+	oscParams.setParamValue("/Gen/Env/gate", (state? 1 : 0));
+	if (state)
+		alphaFilter.excite();
 }
 
 void Tile::display(){
@@ -93,28 +104,35 @@ void Tile::display(){
 
 void Tile::setPitch(float newNoteNum){
 	float newFreq = 440 * powf(2, (newNoteNum - 69)/12);
-	oscParams.setParamValue("/0x00/freq", newFreq);
+	oscParams.setParamValue("/Gen/carfreq", newFreq);
 }
 
 void Tile::setAttack(float attackInMs){
-	oscParams.setParamValue("/0x00/adsr/att", attackInMs);
+	oscParams.setParamValue("/Gen/Env/att", attackInMs);
 }
 void Tile::setRelease(float releaseInMs){
-	oscParams.setParamValue("/0x00/adsr/rel", releaseInMs);
+	oscParams.setParamValue("/Gen/Env/rel", releaseInMs);
 }
 void Tile::setModRatio(float modRatio){
-	oscParams.setParamValue("/0x00/osc/modRatio", modRatio);
+	oscParams.setParamValue("/Gen/modRatio", modRatio);
 }
 void Tile::setModGain(float modGain){
-	oscParams.setParamValue("/0x00/osc/modGain", modGain);
+	oscParams.setParamValue("/Gen/modGain", modGain);
+}
+void Tile::setGain(float gainInDb){
+	oscParams.setParamValue("/Gen/gain", powf(10, gainInDb/20));
+}
+
+void Tile::setPan(float pan){
+	oscParams.setParamValue("/Gen/pan", pan);
 }
 
 
 void Tile::computeAudio(float *buf, int bufSize, int nChan){
-	sawOsc.compute(bufSize, NULL, audioBuf);
+	fmOsc.compute(bufSize, NULL, audioBuf);
 	for (int i = 0; i < bufSize; i++) {
 		buf[2*i]	+= audioBuf[0][i];
-		buf[2*i+1]  += audioBuf[0][i];
+		buf[2*i+1]  += audioBuf[1][i];
 	}
 }
 
@@ -124,7 +142,10 @@ void Tile::computeAudio(float *buf, int bufSize, int nChan){
 void Tile::drawBox(ofVec3f pos, ofVec3f dim, ofVec3f ang, ofColor col){
 	ofPushMatrix();
 	ofTranslate(pos);
+	col.setBrightness(alphaFilter.tick());
 	ofSetColor(col);
-	ofDrawBox(dim.x/2, dim.y/2, 0, dim.x, dim.y, dim.z);
+	ofDrawEllipse(dim.x/2, dim.y/2, 0, dim.x, dim.y);
 	ofPopMatrix();
 }
+
+
