@@ -31,6 +31,8 @@ public:
 	bool getState();
 	void setOn();
 	void setOff();
+	void switchState();
+	
 	void setState(bool newState);
 	
 	void display();

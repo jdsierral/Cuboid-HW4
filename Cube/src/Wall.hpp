@@ -32,6 +32,8 @@ public:
 	ofVec3f getAng();
 	ofColor getCol();
 	
+	Tile* getTile(int m, int n);
+	
 	void display();
 	void tick();
 	void computeAudio(float *output, int bufferSize, int nChan);

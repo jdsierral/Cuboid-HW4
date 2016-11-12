@@ -38,7 +38,6 @@ void Hit::setPole(float newPole){
 ofVec3f Hit::tick(){
 	double currentSample = mag;
 	mag = (mag > 0.00001 ? currentSample * p : 0);
-//	std::cout<<"Mag: "<<currentSample<<std::endl;
 	return currentSample * dir;
 }
 
@@ -103,18 +102,38 @@ void Ball::animate(){
 	if (pos.x <= rearLimit.x){
 		vel.x = -vel.x * eCoef;
 		pos.x = rearLimit.x + (rearLimit.x - pos.x);
+		int m = 0;
+		int n = 0;
+		m = floor((-pos.y + 215)/53.75);
+		n = floor((pos.z + 215)/53.75);
+		wall->getTile(m, n)->switchState();
 	}
 	if (pos.x >= foreLimit.x) {
 		vel.x = -vel.x * eCoef;
 		pos.x = foreLimit.x - (pos.x - foreLimit.x);
+		int m = 0;
+		int n = 0;
+		m = floor((-pos.y + 215)/53.75) + 16;
+		n = floor((pos.z + 215)/53.75);
+		wall->getTile(m, n)->switchState();
 	}
 	if (pos.y <= rearLimit.y) {
 		vel.y = -vel.y * eCoef;
 		pos.y = rearLimit.y + (rearLimit.y - pos.y);
+		int m = 0;
+		int n = 0;
+		m = floor((-pos.y + 215)/53.75) + 8;
+		n = floor((pos.z + 215)/53.75);
+		wall->getTile(m, n)->switchState();
 	}
 	if (pos.y >= foreLimit.y) {
 		vel.y = -vel.y * eCoef;
 		pos.y = foreLimit.y - (pos.y - foreLimit.y);
+		int m = 0;
+		int n = 0;
+		m = floor((-pos.y + 215)/53.75) + 24;
+		n = floor((pos.z + 215)/53.75);
+		wall->getTile(m, n)->switchState();
 	}
 	if (pos.z <= rearLimit.z) {
 		vel.z = -vel.z * eCoef;
@@ -124,4 +143,9 @@ void Ball::animate(){
 		vel.z = -vel.z * eCoef;
 		pos.z = foreLimit.z - (pos.z - foreLimit.z);
 	}
+}
+
+
+void Ball::checkPosition(){
+	std::cout<<pos<<std::endl;
 }

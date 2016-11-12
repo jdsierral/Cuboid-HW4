@@ -71,6 +71,11 @@ void Tile::setOff(){
 	oscParams.setParamValue("/0x00/adsr/gate", 0);
 }
 
+void Tile::switchState(){
+	state = !state;
+	oscParams.setParamValue("/0x00/adsr/gate", (state ? 1 : 0));
+}
+
 void Tile::setState(bool newState){
 	if (newState != state)
 		state = newState;

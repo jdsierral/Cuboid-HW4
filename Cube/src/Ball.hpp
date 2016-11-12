@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "ofMain.h"
+#include "Wall.hpp"
 
 
 class Hit
@@ -41,6 +42,8 @@ public:
 	void display();
 	void animate();
 	
+	void checkPosition();
+	
 	ofVec3f grav;
 	ofVec3f pos;
 	ofVec3f vel;
@@ -56,6 +59,8 @@ public:
 	float radi;
 	
 	float eCoef = 0.95;
+	
+	Wall* wall;
 };
 
 

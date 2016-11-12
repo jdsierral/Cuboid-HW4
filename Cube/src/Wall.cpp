@@ -72,6 +72,10 @@ ofColor Wall::getCol(){
 	return col;
 }
 
+Tile Wall::getTile(int m, int n){
+	return tileBoard[0][0];
+}
+
 void Wall::display(){
 	
 	for (int i = 0; i < m; i++) {

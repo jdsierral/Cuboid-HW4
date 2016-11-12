@@ -38,6 +38,7 @@ void ofApp::update(){
 			wall->tick();
 		}
 	}
+	
 	ofPoint accPoint = sms.getSmoothedXYZ()/100;
 	ball->setGravity(ofPoint(-accPoint.x, accPoint.z, accPoint.y));
 	ball->animate();
@@ -78,18 +79,16 @@ void ofApp::audioOut(float *output, int bufferSize, int nChan){
 			}
 		}
 	}
-	
 }
 
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	switch (key) {
-	  case 'i':
-			//			wall->getTile(0, 0)->oscParams.
+		case ' ':
+			ball->checkPosition();
 			break;
-			
-  default:
+		default:
 			break;
 	}
 
@@ -102,8 +101,6 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-//	wall->sawParams.setParamValue("/0x00/freq", x);
-//	wall->sawParams.setParamValue("/0x00/gain", y/(float)ofGetHeight());
 }
 
 //--------------------------------------------------------------
@@ -113,15 +110,10 @@ void ofApp::mouseDragged(int x, int y, int button){
 //--------------------------------------------------------------
 void ofApp::mousePressed(int x, int y, int button){
 	ball->hit.excite();
-//	wall->sawParams.setParamValue("/0x00/adsr/gate", 1);
-//	for (int i = 0; i < wall->sawParams.getParamsCount(); i++) {
-//		std::cout<<wall->sawParams.getParamAdress(i)<<std::endl;
-//	}
 }
 
 //--------------------------------------------------------------
 void ofApp::mouseReleased(int x, int y, int button){
-//	wall->sawParams.setParamValue("/0x00/adsr/gate", 0);
 }
 
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY ){

@@ -11,11 +11,11 @@
 //--------------------------------------------------------------------------//
 //							Preprocessor definitions						//
 //--------------------------------------------------------------------------//
+
 #define SR				44100	// sample rate
 #define FR				30		// frame Rate;
 #define NUM_CHAN		2		// number of channels
 #define BUF_SIZE		512		// number of frames in a buffer
-
 
 //--------------------------------------------------------------------------//
 //									Application								//
