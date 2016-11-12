@@ -16,6 +16,23 @@ class GenLights
 {
 public:
 	GenLights(){
+//		pointLight.setDiffuseColor(ofColor(255));
+		pointLight.setDiffuseColor(ofColor(255));
+		pointLight.setDiffuseColor( ofColor(0.f, 255.f, 0.f));
+		pointLight.setSpecularColor( ofColor(255.f, 255.f, 0.f));
+		pointLight.setPointLight();
+		
+		directionalLight.setDiffuseColor(ofColor(0.f, 0.f, 255.f));
+		directionalLight.setSpecularColor(ofColor(255.f, 255.f, 255.f));
+		directionalLight.setDirectional();
+		
+		// set the direction of the light
+		// set it pointing from left to right -> //
+		directionalLight.setOrientation( ofVec3f(0, 90, 0) );
+		
+		pointLight.enable();
+		spotLight.enable();
+		directionalLight.enable();
 	}
 	
 	~GenLights(){
@@ -26,11 +43,10 @@ public:
 		ofTranslate(pos);
 		ofEnableLighting();
 		pointLight.enable();
-		difuseLight.enable();
 		ofFill();
-		ofSetColor(difuseLight.getDiffuseColor());
-//		ofTranslate(ofGetWidth() * 0.5, ofGetHeight() * 0.5);
-		ofSetColor(pointLight.getDiffuseColor());
+		pointLight.draw();
+		spotLight.draw();
+		directionalLight.draw();
 		ofPopMatrix();
 	}
 	
@@ -41,7 +57,8 @@ public:
 private:
 	
 	ofLight pointLight;
-	ofLight difuseLight;
+	ofLight spotLight;
+	ofLight directionalLight;
 	ofVec3f pos;
 	
 	

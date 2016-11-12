@@ -5,9 +5,11 @@ void ofApp::setup(){
 	ofSetVerticalSync(true);
 	ofSetFrameRate(FR);
 	ofEnableDepthTest();
-	ofEnableSmoothing();
-	ofEnableAntiAliasing();
+//	ofEnableSmoothing();
+//	ofEnableAntiAliasing();
 	ofEnableAlphaBlending();
+//	ofSetSmoothLighting(true);
+//	ofSetSphereResolution(20);
 	
 	wall = new Wall(numTiles * 4, numTiles, BUF_SIZE);
 	ball = new Ball(wall);
@@ -32,7 +34,7 @@ void ofApp::setup(){
 	
 	ofBackground(44);
 	
-	int AudioInterface = 0;
+	int AudioInterface = 1;
 	
 	// 0 is Default.
 	// 1 is Internal Speakers and Mic.
@@ -98,6 +100,8 @@ void ofApp::draw(){
 		ofTranslate(ofGetWidth()/2.f, ofGetHeight()/2.f);
 		if (bWaveform) waveform->drawWaveform();
 		if (bGenLights) genLights->draw();
+		else ofDisableLighting();
+
 	ofPopMatrix();
 }
 
