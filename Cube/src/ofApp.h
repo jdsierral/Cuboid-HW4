@@ -5,6 +5,7 @@
 #include "Wall.hpp"
 #include "Ball.hpp"
 #include "Waveform.hpp"
+#include "FFTDraw.h"
 #include "GenLights.hpp"
 #include "ofxSuddenMotion.h"
 
@@ -47,6 +48,8 @@ public:
 	void windowResized(int w, int h);
 	void dragEvent(ofDragInfo dragInfo);
 	void gotMessage(ofMessage msg);
+	
+	void exit();
 
 private:
 	ofVec3f pos;
@@ -62,6 +65,8 @@ private:
 	Wall* wall;
 	Ball* ball;
 	Waveform* waveform;
+	FFTDraw* fftDraw;
+	
 	GenLights* genLights;
 	
 	ofSoundStream stream;

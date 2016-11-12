@@ -15,10 +15,13 @@ void ofApp::setup(){
 	wall->setSize(ofVec2f(baseDim * 4, baseDim));
 	
 	ball->setLimits(baseDim, numTiles);
-	ball->setCol(ofColor(200));
+	ball->setCol(ofColor(150));
 	
 	waveform = new Waveform(BUF_SIZE, baseDim);
 	waveform->setWaveformGain(40);
+	
+	fftDraw = new FFTDraw(BUF_SIZE, baseDim);
+	fftDraw->setWaveformGain(40);
 	
 	genLights = new GenLights();
 	
@@ -54,6 +57,13 @@ void ofApp::setup(){
 	stream.setup(this, NUM_CHAN, 0, SR, BUF_SIZE, 2);
 }
 
+void ofApp::exit(){
+//	delete [] wall;
+//	delete [] ball;
+//	delete [] waveform;
+//	delete [] genLights;
+}
+
 //--------------------------------------------------------------
 void ofApp::update(){
 	sms.readMotion();
@@ -69,6 +79,8 @@ void ofApp::update(){
 		ball->setGravity(ofPoint(-accPoint.x, accPoint.z, accPoint.y));
 	}
 	ball->animate();
+	
+	genLights->setPos(pos);
 }
 
 //--------------------------------------------------------------

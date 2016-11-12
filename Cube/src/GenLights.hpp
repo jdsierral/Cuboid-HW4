@@ -22,13 +22,16 @@ public:
 	}
 	
 	void draw(){
+		ofPushMatrix();
+		ofTranslate(pos);
 		ofEnableLighting();
 		pointLight.enable();
 		difuseLight.enable();
 		ofFill();
 		ofSetColor(difuseLight.getDiffuseColor());
-		ofTranslate(ofGetWidth() * 0.5, ofGetHeight() * 0.5);
+//		ofTranslate(ofGetWidth() * 0.5, ofGetHeight() * 0.5);
 		ofSetColor(pointLight.getDiffuseColor());
+		ofPopMatrix();
 	}
 	
 	void setPos (ofVec3f newPos) {

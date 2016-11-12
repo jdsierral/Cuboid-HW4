@@ -19,7 +19,7 @@ public:
 		signal.resize(bufSize, 0);
 	}
 	
-	~Waveform();
+	~Waveform(){};
 	void drawWaveform() {
 		ofPushStyle();
 		ofPushMatrix();

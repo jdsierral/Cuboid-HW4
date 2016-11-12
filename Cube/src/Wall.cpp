@@ -63,8 +63,11 @@ Wall::Wall(int m, int n, int bufSize): m(m), n(n), bufferSize(bufSize) {
 	}
 }
 Wall::~Wall(){
+	for (int i = 0; i < m; i++) {
+		delete[] tileBoard[i];
+	}
+	
 	delete [] tileBoard;
-	delete [] tilePointer;
 }
 
 void Wall::setPos(ofVec3f newPos){
