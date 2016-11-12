@@ -21,11 +21,34 @@ Wall::Wall(int m, int n): m(m), n(n) {
 	
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
-			tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * (int)ofRandom(-4, 4));
-			tileBoard[i][j].setAttack  (1);
-			tileBoard[i][j].setRelease (800);
-			tileBoard[i][j].setModRatio((int)ofRandom(4));
-			tileBoard[i][j].setModGain (ofRandom(1000));
+			if (0 == floor((float)i/(float)n)) {
+				tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * -1);
+				tileBoard[i][j].setAttack  (1);
+				tileBoard[i][j].setRelease (1200);
+				tileBoard[i][j].setModRatio((int)ofRandom(4));
+				tileBoard[i][j].setModGain (ofRandom(1000));
+			}
+			if (1 == floor((float)i/(float)n)) {
+				tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * -2);
+				tileBoard[i][j].setAttack  (150);
+				tileBoard[i][j].setRelease (800);
+				tileBoard[i][j].setModRatio((int)ofRandom(4));
+				tileBoard[i][j].setModGain (ofRandom(1000));
+			}
+			if (2 == floor((float)i/(float)n)) {
+				tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * 0);
+				tileBoard[i][j].setAttack  (200);
+				tileBoard[i][j].setRelease (800);
+				tileBoard[i][j].setModRatio((int)ofRandom(4));
+				tileBoard[i][j].setModGain (ofRandom(1000));
+			}
+			if (3 == floor((float)i/(float)n)) {
+				tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * 1);
+				tileBoard[i][j].setAttack  (1);
+				tileBoard[i][j].setRelease (800);
+				tileBoard[i][j].setModRatio((int)ofRandom(4));
+				tileBoard[i][j].setModGain (ofRandom(1000));
+			}
 		}
 	}
 }
@@ -60,6 +83,11 @@ void Wall::setTileSize(ofVec3f newTileSize){
 void Wall::setSize(ofVec2f newBaseDim){
 	baseDim = newBaseDim;
 	setTileSize(ofVec3f(baseDim.x/(float)m, baseDim.y/(float)n, 1));
+}
+
+void Wall::switchTileState(int x, int y) {
+	if (x >= 0 && x < m && y >= 0 && y < n)
+		tileBoard[x][y].switchState();
 }
 
 ofVec3f Wall::getPos(){
@@ -122,6 +150,10 @@ void Wall::tick(){
 	for (int i = 0; i < m-1; i++) {
 		for (int j = 0; j < n-1; j++) {
 			int state = 0;
+			
+//			if (i < m)
+			
+			
 			if (tileBoard[max<int>(i-1, 0)][max<int>(j-1, 0)].getState())
 				state++;
 			if (tileBoard[i][max<int>(j-1, 0)].getState())

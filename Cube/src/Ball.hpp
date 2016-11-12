@@ -32,7 +32,7 @@ public:
 class Ball
 {
 public:
-	Ball();
+	Ball(Wall* someWall);
 	~Ball();
 	void setLimits(float baseDim);
 	void setLimits(ofPoint newRearLimit, ofPoint newForeLimit);

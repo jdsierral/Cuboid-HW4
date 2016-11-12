@@ -41,7 +41,8 @@ ofVec3f Hit::tick(){
 	return currentSample * dir;
 }
 
-Ball::Ball(){
+Ball::Ball(Wall* someWall){
+	wall = someWall;
 	grav.set(0, 1, 0);
 	radi = 50;
 	col = ofColor(255);
@@ -105,36 +106,44 @@ void Ball::animate(){
 		int m = 0;
 		int n = 0;
 		m = floor((-pos.y + 215)/53.75);
-		n = floor((pos.z + 215)/53.75);
-		wall->getTile(m, n)->switchState();
+		n = floor((-pos.z + 215)/53.75);
+		wall->switchTileState(m, n);
+		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
+	
 	if (pos.x >= foreLimit.x) {
 		vel.x = -vel.x * eCoef;
 		pos.x = foreLimit.x - (pos.x - foreLimit.x);
 		int m = 0;
 		int n = 0;
-		m = floor((-pos.y + 215)/53.75) + 16;
-		n = floor((pos.z + 215)/53.75);
-		wall->getTile(m, n)->switchState();
+		m = floor((pos.y + 215)/53.75) + 16;
+		n = floor((-pos.z + 215)/53.75);
+		wall->switchTileState(m, n);
+		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
+	
 	if (pos.y <= rearLimit.y) {
 		vel.y = -vel.y * eCoef;
 		pos.y = rearLimit.y + (rearLimit.y - pos.y);
 		int m = 0;
 		int n = 0;
-		m = floor((-pos.y + 215)/53.75) + 8;
-		n = floor((pos.z + 215)/53.75);
-		wall->getTile(m, n)->switchState();
+		m = floor((pos.x + 215)/53.75) + 8;
+		n = floor((-pos.z + 215)/53.75);
+		wall->switchTileState(m, n);
+		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
+	
 	if (pos.y >= foreLimit.y) {
 		vel.y = -vel.y * eCoef;
 		pos.y = foreLimit.y - (pos.y - foreLimit.y);
 		int m = 0;
 		int n = 0;
-		m = floor((-pos.y + 215)/53.75) + 24;
-		n = floor((pos.z + 215)/53.75);
-		wall->getTile(m, n)->switchState();
+		m = floor((-pos.x + 215)/53.75) + 24;
+		n = floor((-pos.z + 215)/53.75);
+		wall->switchTileState(m, n);
+		std::cout<<"Values of m, n: "<<m<<", "<<n<<std::endl;
 	}
+	
 	if (pos.z <= rearLimit.z) {
 		vel.z = -vel.z * eCoef;
 		pos.z = rearLimit.z + (rearLimit.z - pos.z);

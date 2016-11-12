@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "ofMain.h"
 #include "Generator.hpp"
-#include "SawOsc.h"
+#include "SinOsc.h"
 
 class Tile
 {
@@ -64,7 +64,7 @@ private:
 	int bufferSize = 512;
 	int sampleRate = 44100;
 	
-	SawOsc sawOsc;
+	SinOsc sawOsc;
 	MapUI oscParams;
 	
 	float** audioBuf;

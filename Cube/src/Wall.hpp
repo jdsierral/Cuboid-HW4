@@ -26,13 +26,13 @@ public:
 	
 	void setTileSize(ofVec3f newTileSize);
 	void setSize(ofVec2f newBaseDim);
-	
+	void switchTileState(int x, int y);
 	
 	ofVec3f getPos();
 	ofVec3f getAng();
 	ofColor getCol();
 	
-	Tile* getTile(int m, int n);
+	Tile getTile(int m, int n);
 	
 	void display();
 	void tick();
@@ -49,8 +49,6 @@ public:
 	
 	ofVec3f testPos;
 	float testRot;
-	
-	
 
 private:
 	const int m, n; // m x n dimensional wall;
@@ -60,16 +58,12 @@ private:
 	ofVec3f tileSize;
 	ofVec2f baseDim;
 	
-	
 	int bufferSize = 512; //change this please;
 	
 	Tile ** tileBoard;
 	Tile * tilePointer;
 	
-	
 	//=================================================================//
-	
-	
 };
 
 #endif /* Wall_hpp */

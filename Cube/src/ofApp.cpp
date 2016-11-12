@@ -4,7 +4,7 @@
 void ofApp::setup(){
 	
 	wall = new Wall(numTiles * 4, numTiles);
-	ball = new Ball();
+	ball = new Ball(wall);
 	
 	wall->setSize(ofVec2f(baseDim * 4, baseDim));
 	wall->setCol(200);
@@ -55,7 +55,7 @@ void ofApp::draw(){
 	ofRotateZ(ang.z);
 	ofSetColor(200);
 	ofDrawBox(0, 0, -baseDim/2, baseDim, baseDim, 1);
-	ofRotateX(90);
+	ofRotateX(-90);
 	wall->display();
 	ofPopMatrix();
 }
