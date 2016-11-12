@@ -22,7 +22,8 @@ public:
 	void setPos(ofVec3f newPos);
 	void setAng(ofVec3f newAng);
 	void setDim(ofVec3f newDim);
-	void setColor(ofColor newCol);
+	void setColorOn(ofColor newCol);
+	void setColorOff(ofColor newCol);
 	
 	ofVec3f getPos();
 	ofVec3f getAng();
@@ -54,13 +55,12 @@ private:
 	
 	void drawBox(ofVec3f pos, ofVec3f dim, ofVec3f ang, ofColor col);
 	
-	ofBoxPrimitive box;
-	ofVec3f dim; //dimensions;
-	ofVec3f pos; //position
-	ofVec3f ang; //angle
-	ofColor colOn; //colors
+	ofVec3f dim;		//dimensions;
+	ofVec3f pos;		//position
+	ofVec3f ang;		//angle
+	ofColor colOn;		//colors
 	ofColor colOff;
-	bool state; //on and off states
+	bool state;			//on and off states
 	
 	//============================================================//
 	int bufferSize = 512;
@@ -73,7 +73,7 @@ private:
 	
 	OnePoleLPF alphaFilter;
 	
-	
+	///MapUI map
 	///Gen/Env/att
 	///Gen/Env/gate
 	///Gen/Env/rel

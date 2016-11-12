@@ -52,6 +52,12 @@ private:
 	ofVec3f pos;
 	ofVec3f ang;
 	
+	bool bWall = true;
+	bool bBall = true;
+	bool bWaveform = true;
+	bool bGenLights = true;
+	bool bStream = true;
+	bool bSms = true;
 	
 	Wall* wall;
 	Ball* ball;

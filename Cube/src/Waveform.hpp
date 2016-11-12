@@ -28,7 +28,7 @@ public:
 		ofSetLineWidth(3);
 		ofNoFill();
 		
-		ofSetColor(0);
+		ofSetColor(7,195,213);
 		ofBeginShape();
 		
 		for (int i = 0; i < bufSize; i++){

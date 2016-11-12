@@ -57,6 +57,8 @@ Wall::Wall(int m, int n, int bufSize): m(m), n(n), bufferSize(bufSize) {
 				tileBoard[i][j].setGain	   (0);
 				tileBoard[i][j].setPan	   (0.5);
 			}
+			tileBoard[i][j].setColorOn (ofColor(206,255,47));
+			tileBoard[i][j].setColorOff(ofColor(206,255,47));
 		}
 	}
 }
@@ -74,7 +76,7 @@ void Wall::setAng(ofVec3f newAng){
 void Wall::setCol(ofColor newCol){
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
-			tileBoard[i][j].setColor(newCol);
+			tileBoard[i][j].setColorOn(newCol);
 		}
 	}
 }
@@ -113,6 +115,10 @@ Tile Wall::getTile(int m, int n){
 }
 
 void Wall::display(){
+	ofSetColor(col);
+//	ofDrawBox(0, 0, -baseDim.x/2, baseDim.x, baseDim.y, 1);
+	ofPushMatrix();
+	ofRotateX(-90);
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
 			if (0 == floor((float)i/(float)n)) {
@@ -151,6 +157,7 @@ void Wall::display(){
 			}
 		}
 	}
+	ofPopMatrix();
 }
 
 void Wall::tick(){

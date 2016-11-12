@@ -30,11 +30,16 @@ public:
 		ofTranslate(ofGetWidth() * 0.5, ofGetHeight() * 0.5);
 		ofSetColor(pointLight.getDiffuseColor());
 	}
+	
+	void setPos (ofVec3f newPos) {
+		pos = newPos;
+	}
 
 private:
 	
 	ofLight pointLight;
 	ofLight difuseLight;
+	ofVec3f pos;
 	
 	
 };

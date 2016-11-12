@@ -11,7 +11,6 @@
 
 Tile::Tile() {
 	state = false;
-	setColor(ofColor(200, 50, 200));
 	setPos(ofVec3f(0, 0, 0));
 	
 	fmOsc.init(sampleRate);
@@ -41,9 +40,12 @@ void Tile::setDim(ofVec3f newDim){
 	dim = newDim;
 }
 
-void Tile::setColor(ofColor newCol){
+void Tile::setColorOn(ofColor newCol){
 	colOn = newCol;
-	colOff = colOn.getInverted();
+}
+
+void Tile::setColorOff(ofColor newCol){
+	colOff = newCol;
 }
 
 
@@ -131,7 +133,7 @@ void Tile::setPan(float pan){
 void Tile::computeAudio(float *buf, int bufSize, int nChan){
 	fmOsc.compute(bufSize, NULL, audioBuf);
 	for (int i = 0; i < bufSize; i++) {
-		buf[2*i]	+= audioBuf[0][i];
+		buf[2 * i]	+= audioBuf[0][i];
 		buf[2*i+1]  += audioBuf[1][i];
 	}
 }
@@ -142,9 +144,9 @@ void Tile::computeAudio(float *buf, int bufSize, int nChan){
 void Tile::drawBox(ofVec3f pos, ofVec3f dim, ofVec3f ang, ofColor col){
 	ofPushMatrix();
 	ofTranslate(pos);
-	col.setBrightness(alphaFilter.tick());
+	col.setBrightness(alphaFilter.tick((state ? 200 : 20)));
 	ofSetColor(col);
-	ofDrawEllipse(dim.x/2, dim.y/2, 0, dim.x, dim.y);
+	ofDrawEllipse(dim.x/2.f, dim.y/2.f, 0, dim.x, dim.y);
 	ofPopMatrix();
 }
 

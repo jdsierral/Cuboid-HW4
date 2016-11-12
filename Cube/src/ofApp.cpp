@@ -5,15 +5,17 @@ void ofApp::setup(){
 	ofSetVerticalSync(true);
 	ofSetFrameRate(FR);
 	ofEnableDepthTest();
+	ofEnableSmoothing();
+	ofEnableAntiAliasing();
+	ofEnableAlphaBlending();
 	
 	wall = new Wall(numTiles * 4, numTiles, BUF_SIZE);
 	ball = new Ball(wall);
 	
 	wall->setSize(ofVec2f(baseDim * 4, baseDim));
-	wall->setCol(200);
 	
 	ball->setLimits(baseDim, numTiles);
-	ball->setCol(ofColor(255, 0, 0));
+	ball->setCol(ofColor(200));
 	
 	waveform = new Waveform(BUF_SIZE, baseDim);
 	waveform->setWaveformGain(40);
@@ -25,7 +27,7 @@ void ofApp::setup(){
 	sms.setValueMode(OFX_SM_SCALED);
 	sms.setSmoothPct(0.9);
 	
-	ofBackground(200);
+	ofBackground(44);
 	
 	int AudioInterface = 0;
 	
@@ -62,8 +64,10 @@ void ofApp::update(){
 		}
 	}
 	
-	ofPoint accPoint = sms.getSmoothedXYZ()/100;
-	ball->setGravity(ofPoint(-accPoint.x, accPoint.z, accPoint.y));
+	if (bSms) {
+		ofPoint accPoint = sms.getSmoothedXYZ()/100;
+		ball->setGravity(ofPoint(-accPoint.x, accPoint.z, accPoint.y));
+	}
 	ball->animate();
 }
 
@@ -75,17 +79,13 @@ void ofApp::draw(){
 //	ofRotateZ(ang.z);
 	ofPushMatrix();
 		ofTranslate(ofGetWidth()/2.f, ofGetHeight()/2.f);
-		ball->display();
-		ofSetColor(200);
-		ofDrawBox(0, 0, -baseDim/2, baseDim, baseDim, 1);
-		ofRotateX(-90);
-		wall->display();
+		if (bBall) ball->display();
+		if (bWall) wall->display();
 	ofPopMatrix();
 	ofPushMatrix();
 		ofTranslate(ofGetWidth()/2.f, ofGetHeight()/2.f);
-		waveform->setPos(pos);
-		waveform->drawWaveform();
-		genLights->draw();
+		if (bWaveform) waveform->drawWaveform();
+		if (bGenLights) genLights->draw();
 	ofPopMatrix();
 }
 
@@ -93,7 +93,7 @@ void ofApp::audioIn(float *input, int bufferSize, int nChan){
 }
 
 void ofApp::audioOut(float *output, int bufferSize, int nChan){
-	if (!bypass) {
+	if (bStream) {
 		wall->computeAudio(output, bufferSize, nChan);
 		for (int i = 0; i < bufferSize; i++) {
 			output[2*i]	  /= 20.f;
@@ -102,7 +102,7 @@ void ofApp::audioOut(float *output, int bufferSize, int nChan){
 				std::cout<<"SampleClipped"<<std::endl;
 			}
 		}
-		waveform->setWaveform(output);
+		if (bWaveform) waveform->setWaveform(output);
 	}
 }
 
@@ -110,14 +110,39 @@ void ofApp::audioOut(float *output, int bufferSize, int nChan){
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
 	switch (key) {
-		case ' ':
-			ball->checkPosition();
+		case '1':
+			bWall = !bWall;
+			std::cout<<"Wall Changed"<<std::endl;
+			break;
+		case '2':
+			bBall = !bBall;
+			std::cout<<"Ball Changed"<<std::endl;
+			break;
+		case '3':
+			bWaveform = !bWaveform;
+			std::cout<<"Waveform Changed"<<std::endl;
+			break;
+		case '4':
+			bGenLights = !bGenLights;
+			std::cout<<"GenLights Changed"<<std::endl;
+			break;
+		case '5':
+			bStream = !bStream;
+			std::cout<<"Audio Changed"<<std::endl;
+			break;
+		case '6':
+			bSms = !bSms;
+			std::cout<<"SMS Changed"<<std::endl;
+			break;
+		case '7':
+			break;
+		case '8':
+			break;
+		case '9':
 			break;
 		default:
 			break;
 	}
-
-	std::cout<<"Mouse: "<<pos<<std::endl;
 }
 
 //--------------------------------------------------------------
