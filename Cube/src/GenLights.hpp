@@ -16,50 +16,60 @@ class GenLights
 {
 public:
 	GenLights(){
-//		pointLight.setDiffuseColor(ofColor(255));
-		pointLight.setDiffuseColor(ofColor(255));
-		pointLight.setDiffuseColor( ofColor(0.f, 255.f, 0.f));
-		pointLight.setSpecularColor( ofColor(255.f, 255.f, 0.f));
+		ofEnableLighting();
 		pointLight.setPointLight();
-		
-		directionalLight.setDiffuseColor(ofColor(0.f, 0.f, 255.f));
-		directionalLight.setSpecularColor(ofColor(255.f, 255.f, 255.f));
-		directionalLight.setDirectional();
-		
-		// set the direction of the light
-		// set it pointing from left to right -> //
-		directionalLight.setOrientation( ofVec3f(0, 90, 0) );
-		
+		pointLight.setDiffuseColor( ofColor(195,254,0));
+		pointLight.setSpecularColor( ofColor(255));
+		pointLight.setGlobalPosition(500, 300, 400);
+		pointLight.setPointLight();
 		pointLight.enable();
-		spotLight.enable();
+
+		
+		directionalLight.setDiffuseColor(ofColor(65, 148, 255));
+		directionalLight.setSpecularColor(ofColor(255));
+		directionalLight.setDirectional();
+		directionalLight.setOrientation(ofVec3f(180, 0, 0));
 		directionalLight.enable();
+		
+		
+		spotLight1.setDiffuseColor( ofColor(255,173,47));
+		spotLight1.setSpecularColor( ofColor(255.f, 255.f, 255.f));
+		spotLight1.setSpotlight();
+		spotLight1.setSpotlightCutOff( 50 );
+		spotLight1.setSpotConcentration( 45 );
+		spotLight1.setOrientation(ofVec3f(-85, -161, 235));
+		spotLight1.setPosition(-256, 254, 187.7);
+		spotLight1.enable();
+		
+		ambientLight.setDiffuseColor(ofColor(255));
+		
 	}
 	
 	~GenLights(){
 	}
 	
 	void draw(){
+		ofSetGlobalAmbientColor(ofColor(75));
 		ofPushMatrix();
-		ofTranslate(pos);
-		ofEnableLighting();
-		pointLight.enable();
-		ofFill();
-		pointLight.draw();
-		spotLight.draw();
-		directionalLight.draw();
 		ofPopMatrix();
 	}
 	
 	void setPos (ofVec3f newPos) {
 		pos = newPos;
 	}
+	
+	void setAng (ofVec3f newAng) {
+		ang = newAng;
+	}
 
 private:
 	
 	ofLight pointLight;
-	ofLight spotLight;
+	ofLight spotLight1;
 	ofLight directionalLight;
+	ofLight ambientLight;
 	ofVec3f pos;
+	ofVec3f ang;
 	
 	
 };

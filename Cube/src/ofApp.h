@@ -7,6 +7,7 @@
 #include "Waveform.hpp"
 #include "FFTDraw.h"
 #include "GenLights.hpp"
+#include "Reverb.h"
 #include "ofxSuddenMotion.h"
 
 
@@ -58,14 +59,20 @@ private:
 	bool bWall = true;
 	bool bBall = true;
 	bool bWaveform = true;
+	bool bFft = true;
 	bool bGenLights = true;
 	bool bStream = true;
 	bool bSms = true;
+	bool bAdjustPos = true;
 	
 	Wall* wall;
 	Ball* ball;
 	Waveform* waveform;
-	FFTDraw* fftDraw;
+	FFTDraw* fft;
+	
+	float **audioBuf;
+	Reverb reverb;
+	MapUI reverbParams;
 	
 	GenLights* genLights;
 	
@@ -80,6 +87,8 @@ private:
 	bool bypass = false;
 	int timer = 0;
 	int timeLapse = 500;
+	
+	float speed = 1;
 	
 	
 };

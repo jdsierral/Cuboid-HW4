@@ -23,7 +23,7 @@ Wall::Wall(int m, int n, int bufSize): m(m), n(n), bufferSize(bufSize) {
 		for (int j = 0; j < n; j++) {
 			if (0 == floor((float)i/(float)n)) {
 				tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * -1);
-				tileBoard[i][j].setAttack  (800);
+				tileBoard[i][j].setAttack  (150);
 				tileBoard[i][j].setRelease (800);
 				tileBoard[i][j].setModRatio(4);
 				tileBoard[i][j].setModGain (ofRandom(20));
@@ -35,13 +35,13 @@ Wall::Wall(int m, int n, int bufSize): m(m), n(n), bufferSize(bufSize) {
 				tileBoard[i][j].setAttack  (10);
 				tileBoard[i][j].setRelease (800);
 				tileBoard[i][j].setModRatio(2);
-				tileBoard[i][j].setModGain (ofRandom(50));
-				tileBoard[i][j].setGain	   (-4.f);
+				tileBoard[i][j].setModGain (20);
+				tileBoard[i][j].setGain	   (-8.f);
 				tileBoard[i][i].setPan	   (ofRandom(0.33, 0.66));
 			}
 			if (2 == floor((float)i/(float)n)) {
 				tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * -1);
-				tileBoard[i][j].setAttack  (800);
+				tileBoard[i][j].setAttack  (150);
 				tileBoard[i][j].setRelease (800);
 				tileBoard[i][j].setModRatio(5);
 				tileBoard[i][j].setModGain (ofRandom(20));
@@ -52,9 +52,9 @@ Wall::Wall(int m, int n, int bufSize): m(m), n(n), bufferSize(bufSize) {
 				tileBoard[i][j].setPitch(noteArray[(int)ofRandom(noteArraySize)] + 12 * 1);
 				tileBoard[i][j].setAttack  (1);
 				tileBoard[i][j].setRelease (800);
-				tileBoard[i][j].setModRatio((int)ofRandom(2));
-				tileBoard[i][j].setModGain (ofRandom(50));
-				tileBoard[i][j].setGain	   (0);
+				tileBoard[i][j].setModRatio(1);
+				tileBoard[i][j].setModGain (ofRandom(5));
+				tileBoard[i][j].setGain	   (-6.f);
 				tileBoard[i][j].setPan	   (0.5);
 			}
 			tileBoard[i][j].setColorOn (ofColor(206,255,47));

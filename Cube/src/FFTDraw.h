@@ -10,57 +10,60 @@
 #define FFTDraw_h
 
 #include "ofMain.h"
-
+#include "ofxFft.h"
+///Users/JuanS/Developer/OF/OF-Rep/addons/ofxFft/src/ofxFft.h
 class FFTDraw {
 public:
 	FFTDraw(int bufSize, int baseDim) : bufSize(bufSize), baseDim(baseDim){
-		signal.resize(bufSize, 0);
+		fft = ofxFft::create(bufSize, OF_FFT_WINDOW_HAMMING);
+		signal.resize(bufSize);
+		audioBins.resize(fft->getBinSize());
 	}
 	
-	~FFTDraw(){
+	void update() {
+		fft->setSignal(&signal[0]);
+		float* curFft = fft->getAmplitude();
+		for (int i = 0; i < fft->getBinSize(); i++) {
+			audioBins[i] = fftGain * curFft[i];
+		}
+	}
+	
+	void display(){
 		ofPushStyle();
 		ofPushMatrix();
 		
-		ofTranslate(-263, 60, -261);
-		ofSetLineWidth(3);
-		ofNoFill();
-		
-		ofSetColor(7,195,213);
-		ofBeginShape();
-		
-		for (int i = 0; i < bufSize; i++){
-			ofVertex(i*baseDim/(float)bufSize, fftGain * signal[i], 0);
+		ofTranslate(-ofGetWidth(), 24, -261);
+		ofSetColor(ofColor(7,195,213, 20));
+		int numBins = fft->getBinSize();
+		for (int i = 0; i < numBins; i++) {
+			ofDrawRectangle(i * 2 * ofGetWidth()/(float)numBins, 0, 0, ofGetWidth()/(float)numBins, audioBins[i]);
+			ofDrawRectangle(i * 2 * ofGetWidth()/(float)numBins, 0, 0, ofGetWidth()/(float)numBins, -audioBins[i]);
 		}
-		ofEndShape(false);
-		
 		ofPopMatrix();
 		ofPopStyle();
-	};
+	}
 	
-	void setFFTVector(float *newSignal){
+	void setSignal(float *newSignal){
 		for (int i = 0; i < bufSize; i++) {
-			signal[i] = (newSignal[i] + newSignal[2*i+1])*fftGain;
+			signal[i] = (newSignal[i] + newSignal[2*i+1]);
 		}
 	}
 	
-	void draw(){}
+	void setGain(float newGain) {
+		fftGain = newGain;
+	}
+	
 	void setPos(ofVec3f newPos){
 		pos = newPos;
 	}
 	
-	void setWaveformGain(float newGain) {
-		fftGain = newGain;
-	}
-	
-	void setPosition(ofVec3f newPos) {
-		pos = newPos;
-	}
 private:
-	ofVec3f pos;
-	vector<float> signal;
+	vector<float> signal, audioBins;
 	int bufSize;
 	float baseDim;
 	float fftGain;
+	ofVec3f pos;
+	ofxFft* fft;
 };
 
 #endif /* FFTDraw */

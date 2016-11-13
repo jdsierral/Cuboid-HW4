@@ -2,14 +2,16 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
+	
+	//
+	
 	ofSetVerticalSync(true);
 	ofSetFrameRate(FR);
 	ofEnableDepthTest();
-//	ofEnableSmoothing();
-//	ofEnableAntiAliasing();
+	ofEnableAntiAliasing();
 	ofEnableAlphaBlending();
-//	ofSetSmoothLighting(true);
-//	ofSetSphereResolution(20);
+	ofEnableBlendMode(OF_BLENDMODE_ALPHA);
+	ofEnableLighting();
 	
 	wall = new Wall(numTiles * 4, numTiles, BUF_SIZE);
 	ball = new Ball(wall);
@@ -17,13 +19,15 @@ void ofApp::setup(){
 	wall->setSize(ofVec2f(baseDim * 4, baseDim));
 	
 	ball->setLimits(baseDim, numTiles);
-	ball->setCol(ofColor(150));
+	ofColor ballCol = ofColor(195,254,0);
+	ballCol.setBrightness(100);
+	ball->setCol(ofColor(ballCol));
 	
-	waveform = new Waveform(BUF_SIZE, baseDim);
-	waveform->setWaveformGain(40);
+	waveform = new Waveform(BUF_SIZE, ofGetWidth());
+	waveform->setGain(30);
 	
-	fftDraw = new FFTDraw(BUF_SIZE, baseDim);
-	fftDraw->setWaveformGain(40);
+	fft = new FFTDraw(BUF_SIZE, baseDim);
+	fft->setGain(600000);
 	
 	genLights = new GenLights();
 	
@@ -34,7 +38,7 @@ void ofApp::setup(){
 	
 	ofBackground(44);
 	
-	int AudioInterface = 1;
+	int AudioInterface = 0;
 	
 	// 0 is Default.
 	// 1 is Internal Speakers and Mic.
@@ -55,6 +59,20 @@ void ofApp::setup(){
 		default:
 			break;
 	}
+	
+	audioBuf = new float*[2];
+	audioBuf[0] = new float[BUF_SIZE];
+	audioBuf[1] = new float[BUF_SIZE];
+	
+	reverb.init(SR); // initializing the Faust module
+	reverb.buildUserInterface(&reverbParams);
+	
+	for (int i = 0; i < reverbParams.getParamsCount(); i++) {
+		std::cout<<reverbParams.getParamAdress(i)<<std::endl;
+	}
+	
+	reverbParams.setParamValue("/Zita_Rev1/Output/Dry/Wet_Mix", -0.25);
+	reverbParams.setParamValue("/Zita_Rev1/Output/Level", 0);
 	
 	stream.setup(this, NUM_CHAN, 0, SR, BUF_SIZE, 2);
 }
@@ -80,28 +98,27 @@ void ofApp::update(){
 		ofPoint accPoint = sms.getSmoothedXYZ()/100;
 		ball->setGravity(ofPoint(-accPoint.x, accPoint.z, accPoint.y));
 	}
-	ball->animate();
 	
+	ball->animate();
 	genLights->setPos(pos);
+	genLights->setAng(ang);
+	fft->update();
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-//	ofTranslate(pos);
-//	ofRotateX(ang.y);
-//	ofRotateY(ang.x);
-//	ofRotateZ(ang.z);
+	ofPushMatrix();
+		ofTranslate(ofGetWidth()/2.f, ofGetHeight()/2.f);
+		ofSetColor(80);
+		ofDrawSphere(0, 0, 0, 1200);
+		if (bGenLights) genLights->draw();
+		if (bWaveform) waveform->display();
+		if (bFft)  fft->display();
+	ofPopMatrix();
 	ofPushMatrix();
 		ofTranslate(ofGetWidth()/2.f, ofGetHeight()/2.f);
 		if (bBall) ball->display();
 		if (bWall) wall->display();
-	ofPopMatrix();
-	ofPushMatrix();
-		ofTranslate(ofGetWidth()/2.f, ofGetHeight()/2.f);
-		if (bWaveform) waveform->drawWaveform();
-		if (bGenLights) genLights->draw();
-		else ofDisableLighting();
-
 	ofPopMatrix();
 }
 
@@ -111,52 +128,89 @@ void ofApp::audioIn(float *input, int bufferSize, int nChan){
 void ofApp::audioOut(float *output, int bufferSize, int nChan){
 	if (bStream) {
 		wall->computeAudio(output, bufferSize, nChan);
+		
 		for (int i = 0; i < bufferSize; i++) {
-			output[2*i]	  /= 20.f;
-			output[2*i+1] /= 20.f;
+			audioBuf[0][i] = output[2*i];
+			audioBuf[1][i] = output[2*i+1];
+		}
+		
+		reverb.compute(bufferSize, audioBuf, audioBuf);
+		
+		for (int i = 0; i < bufferSize; i++) {
+			output[2*i]	  = audioBuf[0][i] / 20.f;
+			output[2*i+1] = audioBuf[1][i] / 20.f;
 			if (output[2*i] > 1) {
 				std::cout<<"SampleClipped"<<std::endl;
 			}
 		}
-		if (bWaveform) waveform->setWaveform(output);
+		
+
+		if (bWaveform) waveform->setSignal(output);
+		if (bFft) fft->setSignal(output);
 	}
 }
 
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
+//	switch (key) {
+//		case '1':
+//			bWall = !bWall;
+//			std::cout<<"Wall Changed"<<std::endl;
+//			break;
+//		case '2':
+//			bBall = !bBall;
+//			std::cout<<"Ball Changed"<<std::endl;
+//			break;
+//		case '3':
+//			bWaveform = !bWaveform;
+//			std::cout<<"Waveform Changed"<<std::endl;
+//			break;
+//		case '4':
+//			bFft = !bFft;
+//			std::cout<<"FFT Changed"<<std::endl;
+//			break;
+//		case '5':
+//			bGenLights = !bGenLights;
+//			if (bGenLights) ofEnableLighting();
+//			else ofDisableLighting();
+//			std::cout<<"GenLights Changed"<<std::endl;
+//			break;
+//		case '6':
+//			bStream = !bStream;
+//			std::cout<<"Audio Changed"<<std::endl;
+//			break;
+//		case '7':
+//			bSms = !bSms;
+//			std::cout<<"SMS Changed"<<std::endl;
+//			break;
+//		case '8':
+//			break;
+//		case '9':
+//			break;
+//		case ' ':
+//			bAdjustPos = !bAdjustPos;
+//			break;
+//		case 'c':
+//			std::cout<<"CurPos: "<<pos<<std::endl;
+//			std::cout<<"CurAng: "<<ang<<std::endl;
+//			break;
+//		case OF_KEY_UP :
+//			speed *= 2.f;
+//			break;
+//		case OF_KEY_DOWN:
+//			speed *= 0.5;
+//			break;
+//		default:
+//			break;
+//	}
+	
 	switch (key) {
-		case '1':
-			bWall = !bWall;
-			std::cout<<"Wall Changed"<<std::endl;
+  case '\\':
+			ball->hit.excite();
 			break;
-		case '2':
-			bBall = !bBall;
-			std::cout<<"Ball Changed"<<std::endl;
-			break;
-		case '3':
-			bWaveform = !bWaveform;
-			std::cout<<"Waveform Changed"<<std::endl;
-			break;
-		case '4':
-			bGenLights = !bGenLights;
-			std::cout<<"GenLights Changed"<<std::endl;
-			break;
-		case '5':
-			bStream = !bStream;
-			std::cout<<"Audio Changed"<<std::endl;
-			break;
-		case '6':
-			bSms = !bSms;
-			std::cout<<"SMS Changed"<<std::endl;
-			break;
-		case '7':
-			break;
-		case '8':
-			break;
-		case '9':
-			break;
-		default:
+			
+  default:
 			break;
 	}
 }
@@ -168,8 +222,14 @@ void ofApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void ofApp::mouseMoved(int x, int y ){
-	pos.x = x - ofGetWidth()/2.f;
-	pos.y = y - ofGetHeight()/2.f;
+	if (bAdjustPos) {
+		pos.x = x - ofGetWidth()/2.f;
+		pos.y = y - ofGetHeight()/2.f;
+	} else {
+		ang.x += (ofGetMouseX() - ofGetPreviousMouseX()) * speed;
+		ang.y += (ofGetMouseY() - ofGetPreviousMouseY()) * speed;
+	}
+	
 }
 
 //--------------------------------------------------------------
@@ -186,7 +246,6 @@ void ofApp::mouseReleased(int x, int y, int button){
 }
 
 void ofApp::mouseScrolled(int x, int y, float scrollX, float scrollY ){
-	pos.z += scrollY;
 }
 
 

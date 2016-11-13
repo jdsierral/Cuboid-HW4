@@ -1,3 +1,2 @@
-ofxFFT
-ofxGui
+ofxFft
 ofxSuddenMotion

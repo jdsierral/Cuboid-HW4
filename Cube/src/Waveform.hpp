@@ -19,20 +19,28 @@ public:
 		signal.resize(bufSize, 0);
 	}
 	
-	~Waveform(){};
-	void drawWaveform() {
+	void display() {
 		ofPushStyle();
 		ofPushMatrix();
 		
-		ofTranslate(-263, 24, -261);
+		ofTranslate(-ofGetWidth(), 24, -261);
 		ofSetLineWidth(3);
 		ofNoFill();
-		
-		ofSetColor(7,195,213);
+		ofColor lineColor = ofColor(7,195,213, 100);
+		ofSetColor(lineColor);
 		ofBeginShape();
 		
 		for (int i = 0; i < bufSize; i++){
-			ofVertex(i*baseDim/(float)bufSize, waveFormGain * signal[i], 0);
+			ofVertex(i * 2 * ofGetWidth()/(float)bufSize, waveFormGain * signal[i], 0);
+		}
+		ofEndShape(false);
+		
+		lineColor.setBrightness(10);
+		ofSetColor(lineColor);
+		ofBeginShape();
+		float delta = 3;
+		for (int i = 0; i < bufSize; i++){
+			ofVertex(delta + i * 2 * ofGetWidth()/(float)bufSize,delta + waveFormGain * signal[i], -delta);
 		}
 		ofEndShape(false);
 		
@@ -40,13 +48,13 @@ public:
 		ofPopStyle();
 	}
 	
-	void setWaveform(float *newSignal){
+	void setSignal(float *newSignal){
 		for (int i = 0; i < bufSize; i++) {
-			signal[i] = (newSignal[i] + newSignal[2*i+1])*waveFormGain;
+			signal[i] = (newSignal[i] + newSignal[2*i+1]) * waveFormGain;
 		}
 	}
 	
-	void setWaveformGain(float newGain) {
+	void setGain(float newGain) {
 		waveFormGain = newGain;
 	}
 	

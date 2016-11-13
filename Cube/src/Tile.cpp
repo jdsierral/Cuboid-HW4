@@ -105,7 +105,7 @@ void Tile::display(){
 
 
 void Tile::setPitch(float newNoteNum){
-	float newFreq = 440 * powf(2, (newNoteNum - 69)/12);
+	float newFreq = 440.f * powf(2.f, (newNoteNum - 69.f)/12.f);
 	oscParams.setParamValue("/Gen/carfreq", newFreq);
 }
 
@@ -147,6 +147,8 @@ void Tile::drawBox(ofVec3f pos, ofVec3f dim, ofVec3f ang, ofColor col){
 	col.setBrightness(alphaFilter.tick((state ? 200 : 20)));
 	ofSetColor(col);
 	ofDrawEllipse(dim.x/2.f, dim.y/2.f, 0, dim.x, dim.y);
+//	ofDrawCylinder(dim.x/2.f, dim.y/2.f, 0, dim.x, 1);
+//	ofDrawBox(dim.x/2.f, dim.y/2.f, 0, dim.x, dim.y, 1);
 	ofPopMatrix();
 }
 
