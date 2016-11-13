@@ -13,6 +13,7 @@
 #include "ofMain.h"
 #include "Wall.hpp"
 
+// Hit class creates an impulse assigned to force value in ball dynamics
 
 class Hit
 {
@@ -28,6 +29,9 @@ public:
 	float mag;
 	float p;
 };
+
+// Ball is full emulation of classical physics... has gravity, acceleration
+// velocity, friction and position;
 
 class Ball
 {
