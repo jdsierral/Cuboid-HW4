@@ -33,7 +33,7 @@ Finally the secondary GUI takes care of the lighting the FFT and the osciloscope
 
 see this youTube video to check how the project works and sounds ;)
 
-https://youtu.be/9c0S9eRqLmk
+https://youtu.be/2xBM34P4ZBM
 
 ## History
 
