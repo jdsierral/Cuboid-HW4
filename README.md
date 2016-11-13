@@ -19,6 +19,8 @@ It is also possible to hit the ball by pushing the key  '\' or a mouseClick
 
 ## Code Description
 
+The actual project is inside Cuboid!!! The other folders were tests to get to understand differnt parts of the project itslef
+
 The whole project was developed through Open Frameworks using a couple of Add-Ons for the FFT and the Sudden Motion Sensor reader for the MacBook Pro. Keep in mind this add-on uses the IOKit from apple in a 32 bit version; however the one used here was modified to be able to run in a 64 bit environment and keep everything compatible.
 
 The project is divided in two big GUIs and a Sound related part. The Walls and the ball is one of the GUI parts which have a lot of logic and internal laws for when to bounce, how fast, where to fall and how to react to an impact. Inside the wall itself, a class called Tile is used for every square in the grid. This square itself holds the audio generator created in Faust as an FM synthesizer. This means that the software is actually running 256 FmSynthesizers! They are all declared through randomizers to let for spontaneous but structured distribuition of sound properties.
